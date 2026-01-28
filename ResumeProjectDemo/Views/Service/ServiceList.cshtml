@@ -1,0 +1,125 @@
+﻿@model List<ResumeProjectDemo.Entities.Service>
+@{
+    ViewData["Title"] = "ServiceList";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="flex-1 overflow-y-auto p-8">
+    <div class="max-w-6xl mx-auto space-y-8">
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <h3 class="text-3xl font-black tracking-tight">Hizmet Listesi</h3>
+                <p class="text-slate-500 dark:text-[#9db2b9] mt-1">
+                    Hizmetlerinizi düzenleyebilir, yeni hizmet ekleyebilir veya ikonlarını güncelleyebilirsiniz.
+                </p>
+            </div>
+            <a href="/Service/CreateService/"
+               class="flex items-center gap-2 px-6 py-3 bg-primary text-background-dark rounded-lg font-bold text-sm hover:opacity-90 transition-opacity">
+                <span class="material-symbols-outlined text-[20px]">add</span>
+                Yeni Hizmet Ekle
+            </a>
+        </div>
+
+        <div class="bg-white dark:bg-[#111618] rounded-xl border border-slate-200 dark:border-[#3b4d54] overflow-hidden shadow-sm">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 dark:bg-[#1c2427] border-b border-slate-200 dark:border-[#3b4d54]">
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">#</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">Hizmet</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">Açıklama</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">İkon</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9] text-right">Sil</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9] text-right">Güncelle</th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="divide-y divide-slate-200 dark:divide-[#3b4d54]">
+                        @foreach (var item in Model)
+                        {
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-white/5 transition-colors group">
+                                <td class="px-6 py-5 font-semibold text-sm">@item.ServiceId</td>
+
+                                <td class="px-6 py-5">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-lg bg-slate-100 dark:bg-[#1c2427] border border-slate-200 dark:border-[#283539] flex items-center justify-center">
+                                            @if (!string.IsNullOrWhiteSpace(item.IconUrl))
+                                            {
+                                                <i class="@item.IconUrl text-[20px] text-primary"></i>
+                                            }
+                                            else
+                                            {
+                                                <span class="material-symbols-outlined text-slate-400">image</span>
+                                            }
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <span class="font-bold text-sm">@item.Title</span>
+                                            <span class="text-xs text-slate-500 dark:text-[#9db2b9]">Service</span>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class="px-6 py-5">
+                                    <p class="text-sm text-slate-700 dark:text-slate-300 line-clamp-2 max-w-xl">
+                                        @item.Description
+                                    </p>
+                                </td>
+
+                                <td class="px-6 py-5">
+                                    @if (!string.IsNullOrWhiteSpace(item.IconUrl))
+                                    {
+                                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-[#1c2427] border border-slate-200 dark:border-[#283539] text-xs font-bold">
+                                            <i class="@item.IconUrl text-[16px] text-primary"></i>
+                                            @item.IconUrl
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40 text-xs font-bold text-amber-700 dark:text-amber-300">
+                                            <span class="material-symbols-outlined text-[16px]">warning</span>
+                                            İkon yok
+                                        </span>
+                                    }
+                                </td>
+
+                                <td class="px-6 py-5 text-right">
+                                    <a href="/Service/DeleteService/@item.ServiceId"
+                                       class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg font-bold text-xs transition-colors">
+                                        <span class="material-symbols-outlined text-[16px]">delete</span>
+                                        Sil
+                                    </a>
+                                </td>
+
+                                <td class="px-6 py-5 text-right">
+                                    <a href="/Service/UpdateService/@item.ServiceId"
+                                       class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white rounded-lg font-bold text-xs transition-colors">
+                                        <span class="material-symbols-outlined text-[16px]">edit</span>
+                                        Güncelle
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="px-6 py-4 bg-slate-50/30 dark:bg-[#1c2427]/30 border-t border-slate-200 dark:border-[#3b4d54] flex items-center justify-between">
+                <p class="text-xs text-slate-500 dark:text-[#9db2b9]">Toplam @Model.Count Hizmet Bulundu.</p>
+            </div>
+        </div>
+
+        <div class="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/50 rounded-xl p-6">
+            <div class="flex gap-3">
+                <span class="material-symbols-outlined text-blue-600 dark:text-blue-400 text-[24px]">info</span>
+                <div>
+                    <h4 class="font-bold text-blue-900 dark:text-blue-300 mb-1">İpucu</h4>
+                    <p class="text-sm text-blue-800 dark:text-blue-400">
+                        İkon alanına “ti-server”, “ti-user” gibi class adı girin. Görsel URL değil, ikon class’ı kullanıyoruz.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

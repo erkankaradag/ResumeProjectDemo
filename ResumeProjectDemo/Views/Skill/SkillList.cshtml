@@ -1,0 +1,124 @@
+﻿@model List<ResumeProjectDemo.Entities.Skill>
+@{
+    ViewData["Title"] = "SkillList";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="flex-1 overflow-y-auto p-8">
+    <div class="max-w-6xl mx-auto space-y-8">
+
+        <!-- Page Heading -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <h3 class="text-3xl font-black tracking-tight">Yetenek Listesi</h3>
+                <p class="text-slate-500 dark:text-[#9db2b9] mt-1">
+                    Yeteneklerinizi düzenleyebilir, yeni yetenek ekleyebilir ve seviyelerini güncelleyebilirsiniz.
+                </p>
+            </div>
+
+            <a href="/Skill/CreateSkill/"
+               class="flex items-center gap-2 px-5 py-2.5 bg-primary text-background-dark rounded-lg font-bold text-sm hover:opacity-90 transition-opacity">
+                <span class="material-symbols-outlined text-[20px]">add</span>
+                Yeni Yetenek Ekle
+            </a>
+        </div>
+
+        <!-- Table Container -->
+        <div class="bg-white dark:bg-[#111618] rounded-xl border border-slate-200 dark:border-[#3b4d54] overflow-hidden shadow-sm">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 dark:bg-[#1c2427] border-b border-slate-200 dark:border-[#3b4d54]">
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">#</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">Yetenek</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">Seviye</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">Görsel</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9] text-right">Sil</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9] text-right">Güncelle</th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="divide-y divide-slate-200 dark:divide-[#3b4d54]">
+                        @foreach (var item in Model)
+                        {
+                            <!-- try parse Number as int for progress -->
+                            int level = 0;
+                            int.TryParse(item.Number, out level);
+                            if (level < 0) { level = 0; }
+                            if (level > 100) { level = 100; }
+
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-white/5 transition-colors group">
+                                <td class="px-6 py-5 font-semibold text-sm">@item.SkillId</td>
+
+                                <td class="px-6 py-5">
+                                    <div class="flex items-center gap-3">
+                                        <span class="material-symbols-outlined text-primary text-[22px]">psychology</span>
+                                        <div class="flex flex-col">
+                                            <span class="font-black text-sm">@item.Name</span>
+                                            <span class="text-xs text-slate-500 dark:text-[#9db2b9]">Skill</span>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class="px-6 py-5">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-40 max-w-[220px] h-2 rounded-full bg-slate-100 dark:bg-[#0f1416] border border-slate-200 dark:border-[#3b4d54] overflow-hidden">
+                                            <div class="h-full bg-primary" style="width:@level%"></div>
+                                        </div>
+                                        <span class="text-xs font-black text-slate-700 dark:text-slate-100 min-w-[40px] text-right">
+                                            @level%
+                                        </span>
+                                    </div>
+                                    <p class="text-[11px] text-slate-500 dark:text-[#9db2b9] mt-1">
+                                        Number alanı % olarak kullanılır (0-100).
+                                    </p>
+                                </td>
+
+                                <!-- small badge -->
+                                <td class="px-6 py-5">
+                                    <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-primary/15 dark:bg-primary/20 text-primary">
+                                        <span class="material-symbols-outlined text-[16px]">bolt</span>
+                                        Aktif
+                                    </span>
+                                </td>
+
+                                <td class="px-6 py-5 text-right">
+                                    <a href="/Skill/DeleteSkill/@item.SkillId"
+                                       class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium text-xs transition-colors">
+                                        <span class="material-symbols-outlined text-[16px]">delete</span>
+                                        Sil
+                                    </a>
+                                </td>
+
+                                <td class="px-6 py-5 text-right">
+                                    <a href="/Skill/UpdateSkill/@item.SkillId"
+                                       class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium text-xs transition-colors">
+                                        <span class="material-symbols-outlined text-[16px]">edit</span>
+                                        Güncelle
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Footer -->
+            <div class="px-6 py-4 bg-slate-50/30 dark:bg-[#1c2427]/30 border-t border-slate-200 dark:border-[#3b4d54] flex items-center justify-between">
+                <p class="text-xs text-slate-500 dark:text-[#9db2b9]">
+                    Toplam <span class="font-bold">@Model.Count</span> Yetenek Bulundu.
+                </p>
+
+                <div class="flex gap-2">
+                    <button class="px-3 py-1 rounded border border-slate-200 dark:border-[#283539] text-xs font-bold disabled:opacity-50" disabled>
+                        Önceki
+                    </button>
+                    <button class="px-3 py-1 rounded border border-slate-200 dark:border-[#283539] text-xs font-bold hover:bg-slate-100 dark:hover:bg-[#283539]">
+                        Sonraki
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

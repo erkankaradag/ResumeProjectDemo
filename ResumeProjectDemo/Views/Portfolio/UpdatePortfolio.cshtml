@@ -1,0 +1,278 @@
+﻿@model ResumeProjectDemo.Entities.Portfolio
+@{
+    ViewData["Title"] = "UpdatePortfolio";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="flex-1 overflow-y-auto p-8">
+    <div class="max-w-6xl mx-auto space-y-8">
+
+        <!-- Header -->
+        <div class="flex items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <a href="/Portfolio/PortfolioList/"
+                   class="flex items-center justify-center w-10 h-10 rounded-lg border border-slate-200 dark:border-[#3b4d54]
+                          hover:bg-slate-50 dark:hover:bg-[#1c2427] transition-colors">
+                    <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+                </a>
+                <div>
+                    <h3 class="text-3xl font-black tracking-tight">Proje Güncelle</h3>
+                    <p class="text-slate-500 dark:text-[#9db2b9] mt-1">
+                        Proje bilgilerinizi düzenleyin ve sağ tarafta canlı önizleyin.
+                    </p>
+                </div>
+            </div>
+
+            <div class="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 dark:bg-[#1c2427]
+                        border border-slate-200 dark:border-[#283539] text-xs font-bold">
+                <span class="material-symbols-outlined text-[18px] text-primary">visibility</span>
+                Live Preview
+            </div>
+        </div>
+
+        <!-- 2 Column Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+            <!-- LEFT: Form -->
+            <div class="bg-white dark:bg-[#111618] rounded-xl border border-slate-200 dark:border-[#3b4d54] overflow-hidden shadow-sm">
+                <div class="p-6 border-b border-slate-200 dark:border-[#3b4d54]">
+                    <h4 class="text-xl font-black">Bilgiler</h4>
+                    <p class="text-sm text-slate-500 dark:text-[#9db2b9] mt-1">Alanları düzenleyip kaydedin.</p>
+                </div>
+
+                <form method="post" class="p-6 space-y-6" id="portfolioForm">
+                    <input type="hidden" asp-for="PortfolioId" />
+
+                    <!-- Title -->
+                    <div>
+                        <label class="block text-sm font-bold mb-2">
+                            Başlık <span class="text-red-500">*</span>
+                        </label>
+                        <input asp-for="Title"
+                               id="pTitle"
+                               class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-[#3b4d54]
+                                      bg-white dark:bg-[#1c2427] focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                               placeholder="Örn: Web Tabanlı Yönetim Paneli"
+                               required />
+                    </div>
+
+                    <!-- ImageUrl -->
+                    <div>
+                        <label class="block text-sm font-bold mb-2">Görsel URL</label>
+                        <input asp-for="ImageUrl"
+                               id="pImage"
+                               class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-[#3b4d54]
+                                      bg-white dark:bg-[#1c2427] focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                               placeholder="https://..." />
+                        <p class="text-xs text-slate-500 dark:text-[#9db2b9] mt-2">
+                            Görsel linki yoksa boş bırakabilirsiniz.
+                        </p>
+                    </div>
+
+                    <!-- ProjeUrl -->
+                    <div>
+                        <label class="block text-sm font-bold mb-2">Proje URL</label>
+                        <input asp-for="ProjeUrl"
+                               id="pUrl"
+                               class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-[#3b4d54]
+                                      bg-white dark:bg-[#1c2427] focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                               placeholder="https://github.com/... veya https://site.com" />
+                    </div>
+
+                    <!-- Category -->
+                    <div>
+                        <label class="block text-sm font-bold mb-2">
+                            Kategori <span class="text-red-500">*</span>
+                        </label>
+                        <select asp-for="CategoryId" asp-items="ViewBag.Categories"
+                                id="pCategory"
+                                class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-[#3b4d54]
+                                       bg-white dark:bg-[#1c2427] focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                                required>
+                            <option value="">Kategori Seçiniz</option>
+                        </select>
+                    </div>
+
+                    <!-- Info box -->
+                    <div class="rounded-xl border border-slate-200 dark:border-[#3b4d54] bg-slate-50 dark:bg-[#1c2427]/40 p-4">
+                        <div class="flex gap-3">
+                            <span class="material-symbols-outlined text-primary text-[22px]">info</span>
+                            <div>
+                                <p class="font-bold text-sm">Bilgilendirme</p>
+                                <p class="text-xs text-slate-500 dark:text-[#9db2b9] mt-1">
+                                    Kaydet dediğinizde güncellenen içerik PortfolioList’te görüntülenir.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="pt-4 border-t border-slate-200 dark:border-[#3b4d54] flex items-center gap-3">
+                        <a href="/Portfolio/PortfolioList/"
+                           class="flex items-center gap-2 px-6 py-3 bg-slate-100 dark:bg-[#1c2427]
+                                  text-slate-700 dark:text-slate-300 rounded-lg font-bold text-sm
+                                  hover:bg-slate-200 dark:hover:bg-[#283539] transition-colors">
+                            <span class="material-symbols-outlined text-[20px]">close</span>
+                            İptal
+                        </a>
+
+                        <button type="submit"
+                                class="ml-auto flex items-center gap-2 px-6 py-3 bg-primary text-background-dark rounded-lg font-bold text-sm hover:opacity-90 transition-opacity">
+                            <span class="material-symbols-outlined text-[20px]">save</span>
+                            Güncellemeyi Kaydet
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- RIGHT: Preview -->
+            <div class="bg-white dark:bg-[#111618] rounded-xl border border-slate-200 dark:border-[#3b4d54] overflow-hidden shadow-sm">
+                <div class="p-6 border-b border-slate-200 dark:border-[#3b4d54]">
+                    <h4 class="text-xl font-black">Önizleme</h4>
+                    <p class="text-sm text-slate-500 dark:text-[#9db2b9] mt-1">Form değiştikçe anında güncellenir.</p>
+                </div>
+
+                <div class="p-6 space-y-4">
+                    <!-- Preview Card -->
+                    <div class="rounded-xl border border-slate-200 dark:border-[#3b4d54] overflow-hidden">
+                        <div class="aspect-[16/9] bg-slate-100 dark:bg-[#1c2427] flex items-center justify-center overflow-hidden">
+                            <img id="previewImg"
+                                 src="@Model?.ImageUrl"
+                                 alt="preview"
+                                 class="w-full h-full object-cover hidden" />
+                            <div id="previewImgFallback" class="flex flex-col items-center gap-2 text-slate-500 dark:text-[#9db2b9]">
+                                <span class="material-symbols-outlined text-[34px]">image</span>
+                                <span class="text-xs font-bold">Görsel yok</span>
+                            </div>
+                        </div>
+
+                        <div class="p-5 space-y-3">
+                            <div class="flex items-start justify-between gap-3">
+                                <div>
+                                    <p class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">Başlık</p>
+                                    <h5 id="previewTitle" class="text-xl font-black mt-1 leading-snug">
+                                        @(string.IsNullOrWhiteSpace(Model?.Title) ? "Yeni Proje" : Model.Title)
+                                    </h5>
+                                </div>
+
+                                <div class="text-right">
+                                    <p class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">Id</p>
+                                    <p class="text-sm font-black mt-1">#@Model?.PortfolioId</p>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-wrap gap-2">
+                                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-[#1c2427]
+                                             border border-slate-200 dark:border-[#283539] text-xs font-bold">
+                                    <span class="material-symbols-outlined text-[16px] text-primary">category</span>
+                                    <span id="previewCategory">Kategori seçili</span>
+                                </span>
+
+                                <a id="previewLink"
+                                   href="@(string.IsNullOrWhiteSpace(Model?.ProjeUrl) ? "#" : Model.ProjeUrl)"
+                                   target="_blank"
+                                   class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-[#1c2427]
+                                          border border-slate-200 dark:border-[#283539] text-xs font-bold hover:bg-slate-200 dark:hover:bg-[#283539] transition-colors">
+                                    <span class="material-symbols-outlined text-[16px] text-primary">link</span>
+                                    <span id="previewUrlText">Proje Linki</span>
+                                </a>
+                            </div>
+
+                            <div class="rounded-lg bg-slate-50 dark:bg-[#1c2427]/40 border border-slate-200 dark:border-[#3b4d54] p-4">
+                                <p class="text-xs text-slate-500 dark:text-[#9db2b9]">
+                                    Not: Görsel URL yanlışsa önizlemede resim görünmez; kayıt yine yapılır.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mini Tip -->
+                    <div class="rounded-xl bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/50 p-5">
+                        <div class="flex gap-3">
+                            <span class="material-symbols-outlined text-blue-600 dark:text-blue-400 text-[24px]">tips_and_updates</span>
+                            <div>
+                                <h6 class="font-black text-blue-900 dark:text-blue-300">İpucu</h6>
+                                <p class="text-sm text-blue-800 dark:text-blue-400 mt-1">
+                                    Görsel URL olarak doğrudan resim linki kullanın (PNG/JPG). GitHub “blob” linkleri bazen resim açmaz.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        const title = document.getElementById("pTitle");
+        const img = document.getElementById("pImage");
+        const url = document.getElementById("pUrl");
+        const category = document.getElementById("pCategory");
+
+        const previewTitle = document.getElementById("previewTitle");
+        const previewImg = document.getElementById("previewImg");
+        const previewImgFallback = document.getElementById("previewImgFallback");
+        const previewLink = document.getElementById("previewLink");
+        const previewUrlText = document.getElementById("previewUrlText");
+        const previewCategory = document.getElementById("previewCategory");
+
+        function safeText(v, fallback) {
+            const t = (v || "").trim();
+            return t.length ? t : fallback;
+        }
+
+        function updateTitle() {
+            previewTitle.textContent = safeText(title.value, "Yeni Proje");
+        }
+
+        function updateCategory() {
+            const sel = category.options[category.selectedIndex];
+            previewCategory.textContent = sel && sel.value ? sel.text : "Kategori seçili";
+        }
+
+        function updateUrl() {
+            const v = (url.value || "").trim();
+            previewLink.href = v.length ? v : "#";
+            previewUrlText.textContent = v.length ? "Link Hazır" : "Proje Linki";
+        }
+
+        function updateImage() {
+            const v = (img.value || "").trim();
+
+            if (!v.length) {
+                previewImg.classList.add("hidden");
+                previewImgFallback.classList.remove("hidden");
+                previewImg.removeAttribute("src");
+                return;
+            }
+
+            previewImg.classList.remove("hidden");
+            previewImgFallback.classList.add("hidden");
+
+            // cache bust
+            const src = v + (v.includes("?") ? "&" : "?") + "v=" + Date.now();
+            previewImg.src = src;
+
+            previewImg.onerror = function () {
+                previewImg.classList.add("hidden");
+                previewImgFallback.classList.remove("hidden");
+            };
+        }
+
+        // initial
+        updateTitle();
+        updateCategory();
+        updateUrl();
+        updateImage();
+
+        // listeners
+        title.addEventListener("input", updateTitle);
+        img.addEventListener("input", updateImage);
+        url.addEventListener("input", updateUrl);
+        category.addEventListener("change", updateCategory);
+    })();
+</script>

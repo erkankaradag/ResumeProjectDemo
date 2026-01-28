@@ -1,0 +1,33 @@
+﻿@model List<ResumeProjectDemo.Entities.About>
+<section id="about">
+	<div class="container">
+		<div class="section-title h2 text-center mb-8">
+			<h2 class="mb-0">Hakkımda</h2>
+			<span class="title-letter">H</span>
+		</div>
+		<div class="row">
+			@foreach (var item in Model)
+			{
+				<div class="col-md-6 col-lg-4 d-none d-lg-block">
+					<img class="img-fluid w-100 rounded" src="@item.ImageUrl" alt="">
+				</div>
+				<div class="col-lg-8">
+					<h3>@item.NameSurname</h3>
+					<p class="lead">@item.Title</p>
+					<p class="mb-5">@item.Description</p>
+					<div class="row mb-8">
+						<div class="col-md-6 mb-5 mb-md-0">
+							@await Component.InvokeAsync("_DefaultEducationComponentPartial")
+						</div>
+						<div class="col-md-6">
+							@await Component.InvokeAsync("_DefaultMyWorkingLifeComponentPartial")
+						</div>
+					</div>
+					<a href="/cv/ErkanKaradagCV.pdf" download class="btn btn-primary">CV'mi İndir</a>
+					<a href="#contact" class="btn btn-light scrollto">Mesaj Gönder</a>
+				</div>
+			}
+
+		</div>
+	</div>
+</section>

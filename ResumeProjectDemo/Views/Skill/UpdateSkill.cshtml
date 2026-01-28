@@ -1,0 +1,255 @@
+﻿@model ResumeProjectDemo.Entities.Skill
+@{
+    ViewData["Title"] = "UpdateSkill";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="flex-1 overflow-y-auto p-8">
+    <div class="max-w-6xl mx-auto space-y-8">
+
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <a href="/Skill/SkillList/"
+                   class="flex items-center justify-center w-10 h-10 rounded-lg border border-slate-200 dark:border-[#3b4d54]
+                          hover:bg-slate-50 dark:hover:bg-[#1c2427] transition-colors">
+                    <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+                </a>
+
+                <div>
+                    <h3 class="text-3xl font-black tracking-tight">Yetenek Güncelle</h3>
+                    <p class="text-slate-500 dark:text-[#9db2b9] mt-1">
+                        Yetenek bilgilerinizi düzenleyin ve sağ tarafta önizleyin.
+                    </p>
+                </div>
+            </div>
+
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-primary/15 dark:bg-primary/20 text-primary">
+                <span class="material-symbols-outlined text-[16px]">bolt</span>
+                Live Preview
+            </span>
+        </div>
+
+        <form method="post" class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+
+            <!-- LEFT: Form -->
+            <div class="lg:col-span-3 bg-white dark:bg-[#111618] rounded-xl border border-slate-200 dark:border-[#3b4d54] overflow-hidden shadow-sm">
+
+                <div class="p-6 border-b border-slate-200 dark:border-[#3b4d54]">
+                    <h4 class="text-lg font-black tracking-tight">Bilgiler</h4>
+                    <p class="text-sm text-slate-500 dark:text-[#9db2b9] mt-1">
+                        Alanları düzenleyip kaydedin.
+                    </p>
+                </div>
+
+                <div class="p-6 space-y-5">
+                    <input type="hidden" asp-for="SkillId" />
+
+                    <!-- Skill Name -->
+                    <div class="space-y-2">
+                        <label for="skillName"
+                               class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">
+                            Yetenek Adı <span class="text-red-500">*</span>
+                        </label>
+                        <input id="skillName"
+                               asp-for="Name"
+                               class="w-full rounded-lg border border-slate-200 dark:border-[#3b4d54]
+                                      bg-white dark:bg-[#0f1416] px-4 py-3 text-sm font-semibold
+                                      placeholder:text-slate-400 dark:placeholder:text-[#6f8790]
+                                      focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
+                               placeholder="Örn: ASP.NET Core"
+                               required />
+                    </div>
+
+                    <!-- Skill Level -->
+                    <div class="space-y-2">
+                        <label for="skillLevel"
+                               class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">
+                            Seviye (0 - 100) <span class="text-red-500">*</span>
+                        </label>
+
+                        <!-- slider + input -->
+                        <div class="grid grid-cols-1 sm:grid-cols-5 gap-3 items-center">
+                            <div class="sm:col-span-4">
+                                <input id="skillLevelRange"
+                                       type="range"
+                                       min="0" max="100"
+                                       class="w-full accent-[color:var(--tw-prose-links)]" />
+                            </div>
+
+                            <div class="sm:col-span-1">
+                                <input id="skillLevel"
+                                       asp-for="Number"
+                                       class="w-full rounded-lg border border-slate-200 dark:border-[#3b4d54]
+                                              bg-white dark:bg-[#0f1416] px-4 py-3 text-sm font-semibold
+                                              focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
+                                       placeholder="85"
+                                       required />
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-slate-500 dark:text-[#9db2b9]">
+                            İpucu: 70+ iyi, 85+ çok iyi, 95+ uzman.
+                        </p>
+                    </div>
+
+                    <!-- Info -->
+                    <div class="rounded-xl border border-slate-200 dark:border-[#3b4d54] bg-slate-50/30 dark:bg-[#1c2427]/30 p-4">
+                        <div class="flex gap-3">
+                            <span class="material-symbols-outlined text-primary text-[22px]">info</span>
+                            <div>
+                                <p class="text-sm font-bold">Bilgilendirme</p>
+                                <p class="text-xs text-slate-500 dark:text-[#9db2b9] mt-1">
+                                    Kaydet dediğinizde güncel seviye SkillList’te görünür.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Actions -->
+                <div class="p-6 border-t border-slate-200 dark:border-[#3b4d54] flex items-center justify-between">
+                    <a href="/Skill/SkillList/"
+                       class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 dark:border-[#3b4d54]
+                              text-sm font-bold text-slate-700 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">close</span>
+                        İptal
+                    </a>
+
+                    <button type="submit"
+                            class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-background-dark rounded-lg font-black text-sm hover:opacity-90 transition-opacity">
+                        <span class="material-symbols-outlined text-[20px]">save</span>
+                        Güncellemeyi Kaydet
+                    </button>
+                </div>
+            </div>
+
+            <!-- RIGHT: Live Preview -->
+            <div class="lg:col-span-2 bg-white dark:bg-[#111618] rounded-xl border border-slate-200 dark:border-[#3b4d54] overflow-hidden shadow-sm">
+                <div class="p-6 border-b border-slate-200 dark:border-[#3b4d54]">
+                    <h4 class="text-lg font-black tracking-tight">Önizleme</h4>
+                    <p class="text-sm text-slate-500 dark:text-[#9db2b9] mt-1">
+                        Form değiştikçe anında güncellenir.
+                    </p>
+                </div>
+
+                <div class="p-6 space-y-5">
+                    <div class="rounded-xl border border-slate-200 dark:border-[#3b4d54] bg-slate-50/30 dark:bg-[#0f1416] p-5 space-y-4">
+
+                        <div class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-primary text-[26px]">psychology</span>
+                            <div class="flex-1">
+                                <p class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">
+                                    Yetenek
+                                </p>
+                                <p id="previewName" class="text-lg font-black mt-1">—</p>
+                            </div>
+                        </div>
+
+                        <div class="rounded-lg border border-slate-200 dark:border-[#3b4d54] bg-white dark:bg-[#111618] px-4 py-4 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <p class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">
+                                    Seviye
+                                </p>
+                                <span id="previewPercent" class="text-sm font-black text-primary">0%</span>
+                            </div>
+
+                            <!-- Progress -->
+                            <div class="w-full h-2.5 rounded-full bg-slate-200 dark:bg-[#1c2427] overflow-hidden">
+                                <div id="previewBar" class="h-full bg-primary rounded-full" style="width:0%"></div>
+                            </div>
+
+                            <p id="previewLabel" class="text-xs font-bold text-slate-500 dark:text-[#9db2b9]">
+                                —
+                            </p>
+                        </div>
+
+                        <div class="pt-1 flex items-center justify-between">
+                            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-primary/15 dark:bg-primary/20 text-primary">
+                                <span class="material-symbols-outlined text-[16px]">edit</span>
+                                Update Preview
+                            </span>
+
+                            <span class="text-[11px] font-bold text-slate-500 dark:text-[#9db2b9]">
+                                SkillId: @Model.SkillId
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div class="rounded-xl border border-slate-200 dark:border-[#3b4d54] bg-slate-50/30 dark:bg-[#1c2427]/30 p-4">
+                        <div class="flex gap-3">
+                            <span class="material-symbols-outlined text-[22px] text-primary">tips_and_updates</span>
+                            <div>
+                                <p class="text-sm font-bold">İpucu</p>
+                                <p class="text-xs text-slate-500 dark:text-[#9db2b9] mt-1">
+                                    Seviye alanına 0-100 arası değer girin. Slider ile hızlıca ayarlayabilirsiniz.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+    const nameEl = document.getElementById("skillName");
+    const numberEl = document.getElementById("skillLevel");
+    const rangeEl = document.getElementById("skillLevelRange");
+
+    const previewName = document.getElementById("previewName");
+    const previewPercent = document.getElementById("previewPercent");
+    const previewBar = document.getElementById("previewBar");
+    const previewLabel = document.getElementById("previewLabel");
+
+    function clamp01_100(v) {
+        if (isNaN(v)) return 0;
+        if (v < 0) return 0;
+        if (v > 100) return 100;
+        return v;
+    }
+
+    function labelFor(v) {
+        if (v === 0) return "Seviye girilmedi";
+        if (v < 40) return "Başlangıç";
+        if (v < 70) return "Orta";
+        if (v < 85) return "İyi";
+        if (v < 95) return "Çok iyi";
+        return "Uzman";
+    }
+
+    function refreshPreview(from) {
+        const n = (nameEl.value || "").trim();
+        let v = parseInt(numberEl.value, 10);
+
+        v = clamp01_100(v);
+
+        // input temiz değilse normalize et
+        if (from === "number") {
+            rangeEl.value = v;
+        } else if (from === "range") {
+            numberEl.value = v;
+        } else {
+            // first init
+            rangeEl.value = isNaN(parseInt(numberEl.value, 10)) ? 0 : v;
+            if (numberEl.value === "" || isNaN(parseInt(numberEl.value, 10))) numberEl.value = v;
+        }
+
+        previewName.textContent = n.length ? n : "—";
+        previewPercent.textContent = v + "%";
+        previewBar.style.width = v + "%";
+        previewLabel.textContent = labelFor(v);
+    }
+
+    // initial fill (model dolu geldiği için)
+    refreshPreview("init");
+
+    nameEl.addEventListener("input", () => refreshPreview("name"));
+    numberEl.addEventListener("input", () => refreshPreview("number"));
+    rangeEl.addEventListener("input", () => refreshPreview("range"));
+</script>

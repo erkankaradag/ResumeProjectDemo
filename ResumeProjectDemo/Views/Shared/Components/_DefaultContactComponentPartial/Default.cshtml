@@ -1,0 +1,155 @@
+﻿<section id="contact">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 mx-lg-auto">
+
+                <div class="row mb-8">
+                    <div class="col-lg-8 mx-lg-auto text-center">
+                        <div class="section-title h2 mb-3">
+                            <h2 class="mb-0">İletişim</h2>
+                            <span class="title-letter">İ</span>
+                        </div>
+                        <p>“Benimle iletişime geçmek veya daha fazla bilgi almak için telefon ya da e-posta yoluyla ulaşabilirsiniz. En kısa sürede geri dönüş sağlayacağım.”</p>
+                    </div>
+                </div>
+
+                <div class="row mb-8">
+                    <div class="col-md-4 mb-5 mb-md-0">
+                        <div class="feature-block">
+                            <div class="feature-icon text-primary mb-4">
+                                <div class="mx-auto"><i class="ti-mobile"></i></div>
+                            </div>
+                            <p class="text-center">
+                                (0850) 840 91 65<br />
+                                (546) 451 1597
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-5 mb-md-0">
+                        <div class="feature-block">
+                            <div class="feature-icon text-primary mb-4">
+                                <div class="mx-auto"><i class="ti-location-pin"></i></div>
+                            </div>
+                            <p class="text-center">
+                                Bursa Nilüfer<br />
+                                Türkiye
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="feature-block">
+                            <div class="feature-icon text-primary mb-4">
+                                <div class="mx-auto"><i class="ti-email"></i></div>
+                            </div>
+                            <p class="text-center">
+                                <a href="mailto:erkankaradagcom.com" class="text-dark">erkankaradagcom.com</a><br />
+                                <a href="mailto:admin@beramedya.com" class="text-dark">admin@beramedya.com</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-form">
+                    <div id="contactAlert" class="text-center" style="display:none; margin-bottom:14px;"></div>
+
+                    <form id="contactForm" method="post" action="/Message/SendMessage" autocomplete="off">
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-row">
+                            <div class="form-process" id="contactLoader" style="display:none;"></div>
+
+                            <div class="col-12 col-md-6">
+                                <div class="form-group error-text-white">
+                                    <input type="text" name="NameSurname" placeholder="Ad Soyad" class="form-control required" autocomplete="off">
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <div class="form-group error-text-white">
+                                    <input type="email" name="EmailAddress" placeholder="Email" class="form-control required" autocomplete="off">
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="form-group error-text-white">
+                                    <input type="text" name="Subject" placeholder="Konu" class="form-control" autocomplete="off">
+                                </div>
+                            </div>
+
+                            <div class="col-12 mb-4">
+                                <div class="form-group error-text-white">
+                                    <textarea name="MessageDetail" placeholder="Mesajınız" class="form-control required" rows="7" autocomplete="off"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-12 text-center">
+                                <button class="btn btn-primary" type="submit" id="contactSubmitBtn">Mesaj Gönder</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    (function () {
+      const form = document.getElementById("contactForm");
+      const btn = document.getElementById("contactSubmitBtn");
+      const loader = document.getElementById("contactLoader");
+      const alertBox = document.getElementById("contactAlert");
+
+      if (!form) return;
+
+      function showAlert(type, text) {
+        alertBox.style.display = "block";
+        alertBox.className = type === "ok" ? "alert alert-success" : "alert alert-danger";
+        alertBox.textContent = text;
+      }
+
+      // Temanın submit handler’ı varsa onu da yakalayıp bizimkini çalıştırıyoruz:
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        alertBox.style.display = "none";
+        loader.style.display = "block";
+        btn.disabled = true;
+
+        try {
+          const fd = new FormData(form);
+          const tokenInput = form.querySelector('input[name="__RequestVerificationToken"]');
+          const token = tokenInput ? tokenInput.value : "";
+
+          const res = await fetch(form.action, {
+            method: "POST",
+            body: fd,
+            headers: token ? { "RequestVerificationToken": token } : {}
+          });
+
+          const data = await res.json().catch(() => null);
+
+          if (!res.ok || !data || data.ok !== true) {
+            showAlert("err", (data && data.message) ? data.message : "Mesaj gönderilemedi.");
+            return;
+          }
+
+          // ✅ Başarılı: form temizle + kullanıcıya bilgi
+          form.reset();
+          showAlert("ok", data.message || "Mesajınız gönderildi.");
+
+          // İstersen otomatik contact’a odak:
+          window.location.hash = "contact";
+        } catch (err) {
+          showAlert("err", "Bir hata oluştu. Lütfen tekrar deneyin.");
+        } finally {
+          loader.style.display = "none";
+          btn.disabled = false;
+        }
+      }, true); // capture=true -> temanın handler’larından önce yakalar
+    })();
+</script>

@@ -1,0 +1,523 @@
+﻿@model List<ResumeProjectDemo.Entities.Message>
+
+@{
+    ViewData["Title"] = "Mesaj Listesi";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+
+    var total = Model?.Count ?? 0;
+    var unread = Model?.Count(m => !m.IsRead) ?? 0;
+    var read = Model?.Count(m => m.IsRead) ?? 0;
+    var thisMonth = Model?.Count(m => m.SendDate.Month == DateTime.Now.Month && m.SendDate.Year == DateTime.Now.Year) ?? 0;
+}
+
+<style>
+    :root {
+        --bg: #0f1a1f;
+        --panel: #151f2a;
+        --panel2: #101821;
+        --stroke: rgba(255,255,255,.10);
+        --stroke2: rgba(255,255,255,.06);
+        --text: #e8ecf2;
+        --muted: #9aa7b8;
+        --accent: #22d3ee;
+        --accent2: #7c3aed;
+        --ok: #22c55e;
+        --warn: #f59e0b;
+        --danger: #ef4444;
+    }
+
+    .msg-wrap {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 24px;
+    }
+
+    .msg-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-bottom: 18px;
+    }
+
+    .msg-title {
+        margin: 0;
+        font-size: 34px;
+        font-weight: 900;
+        letter-spacing: -.02em;
+        background: linear-gradient(135deg,var(--accent),var(--accent2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .msg-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap
+    }
+
+    .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(255,255,255,.04);
+        border: 1px solid var(--stroke);
+        color: var(--text);
+        font-weight: 800;
+        font-size: 13px;
+    }
+
+    .btn-top {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border-radius: 12px;
+        border: 1px solid var(--stroke);
+        background: rgba(255,255,255,.04);
+        color: var(--text);
+        font-weight: 900;
+        font-size: 13px;
+        cursor: pointer;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: .15s
+    }
+
+        .btn-top:hover {
+            transform: translateY(-1px);
+            background: rgba(255,255,255,.07)
+        }
+
+        .btn-top.primary {
+            border: none;
+            background: linear-gradient(135deg,var(--accent),var(--accent2));
+            color: #061018
+        }
+
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(4,minmax(0,1fr));
+        gap: 14px;
+        margin-bottom: 14px
+    }
+
+    .stat {
+        background: linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.03));
+        border: 1px solid var(--stroke);
+        border-radius: 16px;
+        padding: 18px;
+        min-height: 96px
+    }
+
+        .stat .k {
+            color: var(--muted);
+            font-weight: 900;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .08em
+        }
+
+        .stat .v {
+            margin-top: 6px;
+            color: var(--text);
+            font-weight: 950;
+            font-size: 30px
+        }
+
+        .stat .s {
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: 12px
+        }
+
+    @@media (max-width:1100px) {
+        .stats
+
+    {
+        grid-template-columns: repeat(2,minmax(0,1fr));
+    }
+
+    }
+    @@media (max-width:640px) {
+        .stats
+
+    {
+        grid-template-columns: 1fr;
+    }
+
+    .msg-wrap {
+        padding: 16px;
+    }
+
+    }
+
+    .table-card {
+        background: var(--panel);
+        border: 1px solid var(--stroke);
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,.25)
+    }
+
+    .table-scroll {
+        max-height: 640px;
+        overflow: auto
+    }
+
+        .table-scroll::-webkit-scrollbar {
+            width: 10px;
+            height: 10px
+        }
+
+        .table-scroll::-webkit-scrollbar-track {
+            background: rgba(0,0,0,.25)
+        }
+
+        .table-scroll::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg,var(--accent),var(--accent2));
+            border-radius: 999px
+        }
+
+    table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        table-layout: auto;
+        min-width: 980px
+    }
+
+    thead th {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        background: rgba(8,12,18,.65);
+        backdrop-filter: blur(10px);
+        color: rgba(255,255,255,.65);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .10em;
+        font-weight: 900;
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--stroke);
+        white-space: nowrap;
+    }
+
+    tbody td {
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--stroke2);
+        color: var(--text);
+        vertical-align: middle;
+    }
+
+    tbody tr:hover {
+        background: rgba(255,255,255,.03)
+    }
+
+    .col-id {
+        width: 70px
+    }
+
+    .col-sender {
+        min-width: 280px
+    }
+
+    .col-subject {
+        min-width: 380px
+    }
+
+    .col-status {
+        width: 130px
+    }
+
+    .col-date {
+        width: 160px
+    }
+
+    .col-actions {
+        width: 280px;
+        text-align: right
+    }
+
+    .sender {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0
+    }
+
+    .avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        background: linear-gradient(135deg,var(--accent),var(--accent2));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 950;
+        color: #061018;
+        flex: 0 0 auto;
+    }
+
+    .sender .name {
+        font-weight: 950;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis
+    }
+
+    .sender .mail {
+        font-size: 12px;
+        color: var(--muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis
+    }
+
+    .subj {
+        font-weight: 950;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis
+    }
+
+    .preview {
+        margin-top: 4px;
+        font-size: 12px;
+        color: var(--muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 520px
+    }
+
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 950;
+        border: 1px solid var(--stroke);
+        white-space: nowrap;
+        min-width: 92px;
+    }
+
+        .badge.unread {
+            background: rgba(245,158,11,.10);
+            color: var(--warn);
+            border-color: rgba(245,158,11,.25)
+        }
+
+        .badge.read {
+            background: rgba(34,197,94,.10);
+            color: var(--ok);
+            border-color: rgba(34,197,94,.25)
+        }
+
+    .date {
+        color: var(--muted);
+        font-size: 12px;
+        white-space: nowrap
+    }
+
+        .date b {
+            color: rgba(255,255,255,.85);
+            font-weight: 900
+        }
+
+    .acts {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        flex-wrap: nowrap
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 36px;
+        padding: 0 12px;
+        border-radius: 12px;
+        border: 1px solid var(--stroke);
+        background: rgba(255,255,255,.04);
+        color: var(--text);
+        font-weight: 950;
+        font-size: 12px;
+        cursor: pointer;
+        white-space: nowrap;
+        text-decoration: none;
+        transition: .15s;
+    }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            background: rgba(255,255,255,.07)
+        }
+
+        .btn.view {
+            border-color: rgba(34,211,238,.25);
+            background: rgba(34,211,238,.10);
+            color: var(--accent)
+        }
+
+        .btn.toggle {
+            border-color: rgba(124,58,237,.25);
+            background: rgba(124,58,237,.12);
+            color: #d6ccff;
+            min-width: 110px
+        }
+
+        .btn.del {
+            border-color: rgba(239,68,68,.25);
+            background: rgba(239,68,68,.10);
+            color: var(--danger);
+            min-width: 64px
+        }
+
+    .inline {
+        display: inline-flex;
+        margin: 0
+    }
+
+    .empty {
+        padding: 48px 18px;
+        text-align: center;
+        color: var(--muted)
+    }
+
+        .empty .e1 {
+            font-size: 36px;
+            margin-bottom: 8px
+        }
+</style>
+
+<div class="msg-wrap">
+
+    <div class="msg-head">
+        <h1 class="msg-title">Mesaj Listesi</h1>
+        <div class="msg-actions">
+            <span class="chip">Okunmamış: <b>@unread</b></span>
+            <a class="btn-top" href="@Url.Action("MessageList", "Message")">↻ Yenile</a>
+            <a class="btn-top primary" href="@Url.Action("MessageList", "Message")">✉️ Yeni Mesaj</a>
+        </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat">
+            <div class="k">Toplam</div>
+            <div class="v">@total</div>
+            <div class="s">Tüm mesaj kayıtları</div>
+        </div>
+        <div class="stat">
+            <div class="k">Okunmamış</div>
+            <div class="v">@unread</div>
+            <div class="s">Yeni / bekleyen</div>
+        </div>
+        <div class="stat">
+            <div class="k">Okunmuş</div>
+            <div class="v">@read</div>
+            <div class="s">Görüntülenmiş</div>
+        </div>
+        <div class="stat">
+            <div class="k">Bu Ay</div>
+            <div class="v">@thisMonth</div>
+            <div class="s">@DateTime.Now.ToString("MMMM yyyy")</div>
+        </div>
+    </div>
+
+    <div class="table-card">
+        <div class="table-scroll">
+            @if (Model == null || !Model.Any())
+            {
+                <div class="empty">
+                    <div class="e1">📭</div>
+                    Henüz mesaj yok.
+                </div>
+            }
+            else
+            {
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="col-id">#</th>
+                            <th class="col-sender">Gönderen</th>
+                            <th class="col-subject">Konu & Mesaj</th>
+                            <th class="col-status">Durum</th>
+                            <th class="col-date">Tarih</th>
+                            <th class="col-actions">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var msg in Model.OrderByDescending(m => m.SendDate))
+                        {
+                            var letter = string.IsNullOrWhiteSpace(msg.NameSurname) ? "?" : msg.NameSurname.Trim().Substring(0, 1).ToUpper();
+                            var subject = string.IsNullOrWhiteSpace(msg.Subject) ? "(Konu yok)" : msg.Subject;
+                            var preview = string.IsNullOrWhiteSpace(msg.MessageDetail) ? "" :
+                            (msg.MessageDetail.Length > 72 ? msg.MessageDetail.Substring(0, 72) + "..." : msg.MessageDetail);
+
+                            <tr>
+                                <td class="col-id">#@msg.MessageId</td>
+
+                                <td class="col-sender">
+                                    <div class="sender">
+                                        <div class="avatar">@letter</div>
+                                        <div style="min-width:0">
+                                            <div class="name">@msg.NameSurname</div>
+                                            <div class="mail">@msg.EmailAddress</div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class="col-subject">
+                                    <div class="subj">@subject</div>
+                                    <div class="preview">@preview</div>
+                                </td>
+
+                                <td class="col-status">
+                                    <span class="badge @(msg.IsRead ? "read" : "unread")">
+                                        @(msg.IsRead ? "Okundu" : "Okunmadı")
+                                    </span>
+                                </td>
+
+                                <td class="col-date">
+                                    <div class="date"><b>@msg.SendDate.ToString("dd MMM yyyy")</b></div>
+                                    <div class="date">@msg.SendDate.ToString("HH:mm")</div>
+                                </td>
+
+                                <td class="col-actions">
+                                    <div class="acts">
+                                        <a class="btn view"
+                                           href="@Url.Action("MessageDetail", "Message", new { id = msg.MessageId })">
+                                            Görüntüle
+                                        </a>
+
+                                        <form method="post" action="@Url.Action("ToggleRead","Message")" class="inline">
+                                            <input type="hidden" name="id" value="@msg.MessageId" />
+                                            <button type="submit" class="btn toggle">
+                                                @(msg.IsRead ? "Okunmadı Yap" : "Okundu Yap")
+                                            </button>
+                                        </form>
+
+                                        <form method="post" action="@Url.Action("DeleteMessage","Message")" class="inline"
+                                              onsubmit="return confirm('Silmek istediğinizden emin misiniz?');">
+                                            <input type="hidden" name="id" value="@msg.MessageId" />
+                                            <button type="submit" class="btn del">Sil</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+
+</div>

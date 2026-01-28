@@ -1,0 +1,256 @@
+﻿@model ResumeProjectDemo.Entities.Portfolio
+@{
+    ViewData["Title"] = "CreatePortfolio";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="flex-1 overflow-y-auto p-8">
+    <div class="max-w-6xl mx-auto space-y-8">
+
+        <!-- Page Heading -->
+        <div class="flex items-center justify-between gap-4 flex-col sm:flex-row">
+            <div class="flex items-center gap-4">
+                <a href="/Portfolio/PortfolioList"
+                   class="flex items-center justify-center w-10 h-10 rounded-lg border border-slate-200 dark:border-[#3b4d54] hover:bg-slate-50 dark:hover:bg-[#1c2427] transition-colors">
+                    <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+                </a>
+                <div>
+                    <h3 class="text-3xl font-black tracking-tight">Yeni Proje Ekle</h3>
+                    <p class="text-slate-500 dark:text-[#9db2b9] mt-1">
+                        Proje bilgilerini girin ve sağ tarafta canlı önizleyin.
+                    </p>
+                </div>
+            </div>
+
+            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 dark:bg-[#1c2427] border border-slate-200 dark:border-[#283539] text-xs font-bold">
+                <span class="material-symbols-outlined text-[18px] text-primary">visibility</span>
+                Live Preview
+            </span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- FORM -->
+            <div class="lg:col-span-2 bg-white dark:bg-[#111618] rounded-xl border border-slate-200 dark:border-[#3b4d54] overflow-hidden shadow-sm">
+                <div class="p-8">
+                    <form method="post" class="space-y-6" id="portfolioForm">
+
+                        <!-- Title -->
+                        <div>
+                            <label class="block text-sm font-bold mb-2">
+                                Başlık <span class="text-red-500">*</span>
+                            </label>
+                            <input asp-for="Title" id="inpTitle"
+                                   placeholder="Örn: Web Tabanlı Yönetim Paneli"
+                                   class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-[#3b4d54]
+                                          bg-white dark:bg-[#1c2427]
+                                          focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                                   required />
+                        </div>
+
+                        <!-- ImageUrl -->
+                        <div>
+                            <label class="block text-sm font-bold mb-2">Görsel URL</label>
+                            <input asp-for="ImageUrl" id="inpImage"
+                                   placeholder="https://..."
+                                   class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-[#3b4d54]
+                                          bg-white dark:bg-[#1c2427]
+                                          focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all" />
+                            <p class="text-xs text-slate-500 dark:text-[#9db2b9] mt-2">
+                                İpucu: PNG/JPG/WebP linki girersen önizlemede görsel çıkar.
+                            </p>
+                        </div>
+
+                        <!-- Project URL -->
+                        <div>
+                            <label class="block text-sm font-bold mb-2">Proje URL</label>
+                            <input asp-for="ProjeUrl" id="inpUrl"
+                                   placeholder="https://github.com/... veya https://site.com"
+                                   class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-[#3b4d54]
+                                          bg-white dark:bg-[#1c2427]
+                                          focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all" />
+                        </div>
+
+                        <!-- Category -->
+                        <div>
+                            <label class="block text-sm font-bold mb-2">
+                                Kategori <span class="text-red-500">*</span>
+                            </label>
+                            <select asp-for="CategoryId" asp-items="ViewBag.Categories" id="inpCategory"
+                                    class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-[#3b4d54]
+                                           bg-white dark:bg-[#1c2427]
+                                           focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                                    required>
+                                <option value="">Kategori Seçiniz</option>
+                            </select>
+                            <p class="text-xs text-slate-500 dark:text-[#9db2b9] mt-2">
+                                Bu alan Portfolio.CategoryId üzerinden ilişki kurar.
+                            </p>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="flex items-center gap-3 pt-4 border-t border-slate-200 dark:border-[#3b4d54]">
+                            <button type="submit"
+                                    class="flex items-center gap-2 px-6 py-3 bg-primary text-background-dark rounded-lg font-bold text-sm hover:opacity-90 transition-opacity">
+                                <span class="material-symbols-outlined text-[20px]">save</span>
+                                Kaydet
+                            </button>
+
+                            <a href="/Portfolio/PortfolioList"
+                               class="flex items-center gap-2 px-6 py-3 bg-slate-100 dark:bg-[#1c2427] text-slate-700 dark:text-slate-300 rounded-lg font-bold text-sm hover:bg-slate-200 dark:hover:bg-[#283539] transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">close</span>
+                                İptal
+                            </a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+            <!-- PREVIEW -->
+            <div class="lg:col-span-1 bg-white dark:bg-[#111618] rounded-xl border border-slate-200 dark:border-[#3b4d54] overflow-hidden shadow-sm">
+                <div class="p-6 border-b border-slate-200 dark:border-[#3b4d54]">
+                    <h4 class="text-lg font-black">Önizleme</h4>
+                    <p class="text-slate-500 dark:text-[#9db2b9] text-sm mt-1">Form değiştikçe anında güncellenir.</p>
+                </div>
+
+                <div class="p-6 space-y-4">
+
+                    <!-- Preview Card -->
+                    <div class="rounded-xl border border-slate-200 dark:border-[#3b4d54] overflow-hidden bg-slate-50/40 dark:bg-[#1c2427]/40">
+                        <!-- Image -->
+                        <div class="relative w-full aspect-[16/9] bg-slate-200 dark:bg-[#0f1416] overflow-hidden">
+                            <img id="prevImg"
+                                 src=""
+                                 alt="preview"
+                                 class="w-full h-full object-cover hidden" />
+                            <div id="prevImgPlaceholder" class="w-full h-full flex items-center justify-center">
+                                <div class="text-center">
+                                    <span class="material-symbols-outlined text-slate-500 dark:text-[#9db2b9] text-[40px]">image</span>
+                                    <p class="text-xs text-slate-500 dark:text-[#9db2b9] mt-2 font-bold">
+                                        Görsel URL girilmedi
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="absolute top-3 left-3">
+                                <span id="prevCategory"
+                                      class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/80 dark:bg-[#111618]/80 border border-slate-200 dark:border-[#3b4d54] text-xs font-black">
+                                    <span class="material-symbols-outlined text-[16px] text-primary">category</span>
+                                    Kategori
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="p-5">
+                            <p class="text-xs uppercase tracking-wider text-slate-500 dark:text-[#9db2b9] font-bold">Portfolio</p>
+                            <h5 id="prevTitle" class="text-lg font-black mt-1">Yeni Proje</h5>
+
+                            <div class="mt-4 flex items-center justify-between gap-3">
+                                <a id="prevBtn"
+                                   href="#"
+                                   target="_blank"
+                                   class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-background-dark font-bold text-sm hover:opacity-90 transition-opacity pointer-events-none opacity-50">
+                                    <span class="material-symbols-outlined text-[18px]">open_in_new</span>
+                                    Projeyi Aç
+                                </a>
+
+                                <span id="prevUrlText" class="text-xs text-slate-500 dark:text-[#9db2b9] truncate max-w-[140px]">
+                                    URL yok
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Info -->
+                    <div class="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/50 rounded-xl p-4">
+                        <div class="flex gap-3">
+                            <span class="material-symbols-outlined text-blue-600 dark:text-blue-400 text-[22px]">info</span>
+                            <p class="text-sm text-blue-800 dark:text-blue-400">
+                                Görsel URL girersen kart kapağında görünür. Proje URL girince “Projeyi Aç” butonu aktif olur.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const inpTitle = document.getElementById("inpTitle");
+    const inpImage = document.getElementById("inpImage");
+    const inpUrl = document.getElementById("inpUrl");
+    const inpCategory = document.getElementById("inpCategory");
+
+    const prevTitle = document.getElementById("prevTitle");
+    const prevImg = document.getElementById("prevImg");
+    const prevImgPlaceholder = document.getElementById("prevImgPlaceholder");
+    const prevBtn = document.getElementById("prevBtn");
+    const prevUrlText = document.getElementById("prevUrlText");
+    const prevCategory = document.getElementById("prevCategory");
+
+    function safeText(v, fallback) {
+        const t = (v || "").trim();
+        return t.length ? t : fallback;
+    }
+
+    function isValidUrl(url) {
+        try {
+            if (!url || !url.trim()) return false;
+            new URL(url.trim());
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
+    function updatePreview() {
+        // Title
+        prevTitle.textContent = safeText(inpTitle.value, "Yeni Proje");
+
+        // Category text
+        const selectedText = inpCategory?.options?.[inpCategory.selectedIndex]?.text || "Kategori";
+        prevCategory.innerHTML = `
+            <span class="material-symbols-outlined text-[16px] text-primary">category</span>
+            ${safeText(selectedText, "Kategori")}
+        `;
+
+        // Image
+        const imgUrl = (inpImage.value || "").trim();
+        if (isValidUrl(imgUrl)) {
+            prevImg.src = imgUrl;
+            prevImg.classList.remove("hidden");
+            prevImgPlaceholder.classList.add("hidden");
+        } else {
+            prevImg.removeAttribute("src");
+            prevImg.classList.add("hidden");
+            prevImgPlaceholder.classList.remove("hidden");
+        }
+
+        // Project URL + Button
+        const projectUrl = (inpUrl.value || "").trim();
+        if (isValidUrl(projectUrl)) {
+            prevBtn.href = projectUrl;
+            prevBtn.classList.remove("pointer-events-none", "opacity-50");
+            prevUrlText.textContent = projectUrl;
+        } else {
+            prevBtn.href = "#";
+            prevBtn.classList.add("pointer-events-none", "opacity-50");
+            prevUrlText.textContent = "URL yok";
+        }
+    }
+
+    ["input", "change", "keyup"].forEach(evt => {
+        inpTitle.addEventListener(evt, updatePreview);
+        inpImage.addEventListener(evt, updatePreview);
+        inpUrl.addEventListener(evt, updatePreview);
+        inpCategory.addEventListener(evt, updatePreview);
+    });
+
+    updatePreview();
+</script>

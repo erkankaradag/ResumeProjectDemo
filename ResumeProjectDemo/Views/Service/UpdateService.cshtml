@@ -1,0 +1,151 @@
+﻿@model ResumeProjectDemo.Entities.Service
+@{
+    ViewData["Title"] = "UpdateService";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+<link rel="stylesheet" href="https://themify.me/themify-icons.css">
+
+<div class="flex-1 overflow-y-auto p-8">
+    <div class="max-w-6xl mx-auto space-y-8">
+
+        <div class="flex items-center gap-4">
+            <a href="/Service/ServiceList/" class="flex items-center justify-center w-10 h-10 rounded-lg border border-slate-200 dark:border-[#3b4d54] hover:bg-slate-50 dark:hover:bg-[#1c2427] transition-colors">
+                <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+            </a>
+            <div>
+                <h3 class="text-3xl font-black tracking-tight">Hizmet Güncelle</h3>
+                <p class="text-slate-500 dark:text-[#9db2b9] mt-1">Bilgileri düzenleyin ve sağ tarafta önizleyin.</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Form -->
+            <div class="lg:col-span-2 bg-white dark:bg-[#111618] rounded-xl border border-slate-200 dark:border-[#3b4d54] overflow-hidden shadow-sm">
+                <div class="p-8">
+                    <form method="post" class="space-y-6" id="serviceForm">
+                        <input type="hidden" asp-for="ServiceId" />
+
+                        <div>
+                            <label class="block text-sm font-bold mb-2">
+                                Hizmet Başlığı <span class="text-red-500">*</span>
+                            </label>
+                            <input asp-for="Title" id="inpTitle"
+                                   class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-[#3b4d54] bg-white dark:bg-[#1c2427] focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                                   required />
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold mb-2">
+                                Açıklama <span class="text-red-500">*</span>
+                            </label>
+                            <textarea asp-for="Description" id="inpDesc" rows="6"
+                                      class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-[#3b4d54] bg-white dark:bg-[#1c2427] focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all resize-none"
+                                      required></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold mb-2">IconUrl (Themify Class)</label>
+                            <input asp-for="IconUrl" id="inpIcon"
+                                   class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-[#3b4d54] bg-white dark:bg-[#1c2427] focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                                   placeholder="Örn: ti-server" />
+                        </div>
+
+                        <div class="flex items-center gap-3 pt-4 border-t border-slate-200 dark:border-[#3b4d54]">
+                            <button type="submit"
+                                    class="flex items-center gap-2 px-6 py-3 bg-primary text-background-dark rounded-lg font-bold text-sm hover:opacity-90 transition-opacity">
+                                <span class="material-symbols-outlined text-[20px]">check</span>
+                                Güncellemeyi Kaydet
+                            </button>
+                            <a href="/Service/ServiceList/"
+                               class="flex items-center gap-2 px-6 py-3 bg-slate-100 dark:bg-[#1c2427] text-slate-700 dark:text-slate-300 rounded-lg font-bold text-sm hover:bg-slate-200 dark:hover:bg-[#283539] transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">close</span>
+                                İptal
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Preview -->
+            <div class="lg:col-span-1 bg-white dark:bg-[#111618] rounded-xl border border-slate-200 dark:border-[#3b4d54] overflow-hidden shadow-sm">
+                <div class="p-6 border-b border-slate-200 dark:border-[#3b4d54]">
+                    <h4 class="text-lg font-black">Önizleme</h4>
+                    <p class="text-slate-500 dark:text-[#9db2b9] text-sm mt-1">Form değiştikçe anında güncellenir.</p>
+                </div>
+
+                <div class="p-6 space-y-4">
+                    <div class="p-5 rounded-xl border border-slate-200 dark:border-[#3b4d54] bg-slate-50/40 dark:bg-[#1c2427]/40">
+                        <div class="flex items-start gap-3">
+                            <div class="w-12 h-12 rounded-xl bg-white dark:bg-[#111618] border border-slate-200 dark:border-[#3b4d54] flex items-center justify-center">
+                                <i id="prevIcon" class="ti-layout text-[20px] text-primary"></i>
+                            </div>
+
+                            <div class="min-w-0">
+                                <p class="text-xs uppercase tracking-wider text-slate-500 dark:text-[#9db2b9] font-bold">Hizmet</p>
+                                <h5 id="prevTitle" class="text-base font-black mt-1">-</h5>
+                            </div>
+                        </div>
+
+                        <p id="prevDesc" class="text-sm text-slate-700 dark:text-slate-300 mt-4 leading-relaxed">
+                            -
+                        </p>
+
+                        <div class="mt-4 flex items-center justify-between">
+                            <span id="prevChip" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white dark:bg-[#111618] border border-slate-200 dark:border-[#3b4d54] text-xs font-bold">
+                                <i class="ti-layout text-[14px] text-primary"></i>
+                                ti-layout
+                            </span>
+                            <span class="text-xs text-slate-500 dark:text-[#9db2b9] font-bold">ServiceId: @Model.ServiceId</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/50 rounded-xl p-4">
+                        <div class="flex gap-3">
+                            <span class="material-symbols-outlined text-blue-600 dark:text-blue-400 text-[22px]">tips_and_updates</span>
+                            <p class="text-sm text-blue-800 dark:text-blue-400">
+                                IconUrl alanına “ti-server” gibi class gir. URL değil.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const inpTitle = document.getElementById("inpTitle");
+    const inpDesc = document.getElementById("inpDesc");
+    const inpIcon = document.getElementById("inpIcon");
+
+    const prevTitle = document.getElementById("prevTitle");
+    const prevDesc = document.getElementById("prevDesc");
+    const prevIcon = document.getElementById("prevIcon");
+    const prevChip = document.getElementById("prevChip");
+
+    function safeText(v, fallback) {
+        const t = (v || "").trim();
+        return t.length ? t : fallback;
+    }
+
+    function updatePreview() {
+        const title = safeText(inpTitle.value, "Hizmet");
+        const desc = safeText(inpDesc.value, "Açıklama");
+        const iconClass = safeText(inpIcon.value, "ti-layout");
+
+        prevTitle.textContent = title;
+        prevDesc.textContent = desc;
+
+        prevIcon.className = iconClass + " text-[20px] text-primary";
+        prevChip.innerHTML = `<i class="${iconClass} text-[14px] text-primary"></i>${iconClass}`;
+    }
+
+    ["input", "change", "keyup"].forEach(evt => {
+        inpTitle.addEventListener(evt, updatePreview);
+        inpDesc.addEventListener(evt, updatePreview);
+        inpIcon.addEventListener(evt, updatePreview);
+    });
+
+    updatePreview();
+</script>

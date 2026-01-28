@@ -1,0 +1,44 @@
+﻿@model List<ResumeProjectDemo.Entities.Testimonial>
+
+<section id="testimonial">
+    <div class="overlay">
+        <div class="overlay-inner bg-image-holder bg-cover bg-center"
+             style="background-image:url('@(Model.FirstOrDefault()?.BackgroundUrl ?? "demo/images/image-5.jpg")')">
+            <img id="testimonialBg"
+                 src="@(Model.FirstOrDefault()?.BackgroundUrl ?? "demo/images/image-5.jpg")"
+                 alt="background"
+                 style="display:none;">
+        </div>
+        @* Siyah katmanı istemiyorsan kapalı kalsın *@
+        @* <div class="overlay-inner bg-dark opacity-70"></div> *@
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-11 col-xl-10 mx-lg-auto text-center text-white">
+                <div class="slider dots-light dots-outside" data-slick='{"dots":true,"arrows":false}'>
+                    @foreach (var item in Model)
+                    {
+                        <div class="testimonial-slide" data-bg="@item.BackgroundUrl">
+                            <div class="icon icon-5x mb-8">
+                                <i class="fa fa-quote-right"></i>
+                            </div>
+                            <blockquote>
+                                <p class="mb-5">@item.CommentDetail</p>
+                                <footer class="d-flex justify-content-center align-items-center w-lg-50 mx-auto text-left">
+                                    <div class="avatar">
+                                        <img src="@item.ImageUrl" alt="" class="avatar-img rounded-circle shadow-dark">
+                                    </div>
+                                    <div class="ml-5">
+                                        <h4 class="h6 mb-0">@item.NameSurname</h4>
+                                        <small class="d-block">@item.TitleAndCompany</small>
+                                    </div>
+                                </footer>
+                            </blockquote>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

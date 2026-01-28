@@ -1,0 +1,148 @@
+﻿
+@{
+    ViewData["Title"] = "AboutList";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+@model List<ResumeProjectDemo.Entities.About>
+@{
+    ViewData["Title"] = "AboutList";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="flex-1 overflow-y-auto p-8">
+    <div class="max-w-6xl mx-auto space-y-8">
+
+        <!-- Page Heading -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <h3 class="text-3xl font-black tracking-tight">Hakkımda Listesi</h3>
+                <p class="text-slate-500 dark:text-[#9db2b9] mt-1">
+                    Hakkımda içeriklerinizi düzenleyebilir, yeni kayıt ekleyebilirsiniz.
+                </p>
+            </div>
+
+            <a href="/About/CreateAbout/"
+               class="flex items-center gap-2 px-5 py-2.5 bg-primary text-background-dark rounded-lg font-bold text-sm hover:opacity-90 transition-opacity">
+                <span class="material-symbols-outlined text-[20px]">add</span>
+                Yeni Hakkımda Ekle
+            </a>
+        </div>
+
+        <!-- Table Container -->
+        <div class="bg-white dark:bg-[#111618] rounded-xl border border-slate-200 dark:border-[#3b4d54] overflow-hidden shadow-sm">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 dark:bg-[#1c2427] border-b border-slate-200 dark:border-[#3b4d54]">
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">#</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">Görsel</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">Ad Soyad</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">Ünvan</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">Açıklama</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9] text-right">Sil</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9] text-right">Güncelle</th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="divide-y divide-slate-200 dark:divide-[#3b4d54]">
+                        @if (Model == null || Model.Count == 0)
+                        {
+                            <tr>
+                                <td colspan="7" class="px-6 py-10 text-center text-sm text-slate-500 dark:text-[#9db2b9]">
+                                    Henüz kayıt bulunamadı.
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr class="hover:bg-slate-50/50 dark:hover:bg-white/5 transition-colors group">
+                                    <td class="px-6 py-5 font-semibold text-sm">@item.AboutId</td>
+
+                                    <td class="px-6 py-5">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-12 h-12 rounded-xl bg-slate-200 dark:bg-[#283539] overflow-hidden border border-slate-200 dark:border-[#3b4d54]">
+                                                @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                                {
+                                                    <img src="@item.ImageUrl" class="w-full h-full object-cover" alt="about image" />
+                                                }
+                                            </div>
+                                            <div class="text-xs text-slate-500 dark:text-[#9db2b9] hidden sm:block">
+                                                @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                                {
+                                                    <span class="inline-flex items-center gap-1">
+                                                        <span class="material-symbols-outlined text-[16px]">link</span>
+                                                        Görsel URL
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="inline-flex items-center gap-1">
+                                                        <span class="material-symbols-outlined text-[16px]">image_not_supported</span>
+                                                        Yok
+                                                    </span>
+                                                }
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td class="px-6 py-5 font-semibold text-sm">@item.NameSurname</td>
+                                    <td class="px-6 py-5 font-semibold text-sm">@item.Title</td>
+
+                                    <td class="px-6 py-5 text-sm text-slate-600 dark:text-[#c7d7dc]">
+                                        <div class="max-w-[520px] line-clamp-2">
+                                            @item.Description
+                                        </div>
+                                    </td>
+
+                                    <td class="px-6 py-5 text-right">
+                                        <a href="/About/DeleteAbout/@item.AboutId"
+                                           class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium text-xs transition-colors"
+                                           onclick="return confirm('Bu kaydı silmek istediğinize emin misiniz?');">
+                                            <span class="material-symbols-outlined text-[16px]">delete</span>
+                                            Sil
+                                        </a>
+                                    </td>
+
+                                    <td class="px-6 py-5 text-right">
+                                        <a href="/About/UpdateAbout/@item.AboutId"
+                                           class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium text-xs transition-colors">
+                                            <span class="material-symbols-outlined text-[16px]">edit</span>
+                                            Güncelle
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Footer -->
+            <div class="px-6 py-4 bg-slate-50/30 dark:bg-[#1c2427]/30 border-t border-slate-200 dark:border-[#3b4d54] flex items-center justify-between">
+                <p class="text-xs text-slate-500 dark:text-[#9db2b9]">
+                    Toplam @(Model?.Count ?? 0) Hakkımda kaydı bulundu.
+                </p>
+
+                <div class="flex gap-2">
+                    <button class="px-3 py-1 rounded border border-slate-200 dark:border-[#283539] text-xs font-bold disabled:opacity-50" disabled>Önceki</button>
+                    <button class="px-3 py-1 rounded border border-slate-200 dark:border-[#283539] text-xs font-bold hover:bg-slate-100 dark:hover:bg-[#283539]">Sonraki</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    /* Tailwind CDN kullanırken line-clamp plugin bazen gelmeyebiliyor.
+           Bu yüzden küçük fallback ekliyorum. */
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+</style>

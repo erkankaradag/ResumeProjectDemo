@@ -1,0 +1,194 @@
+﻿@model List<ResumeProjectDemo.Entities.Testimonial>
+@{
+    ViewData["Title"] = "TestimonialList";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="flex-1 overflow-y-auto p-8">
+    <div class="max-w-6xl mx-auto space-y-8">
+
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <h3 class="text-3xl font-black tracking-tight">Referans / Yorum Listesi</h3>
+                <p class="text-slate-500 dark:text-[#9db2b9] mt-1">
+                    Yorumları yönetebilir, onay durumunu değiştirebilir ve içerikleri güncelleyebilirsiniz.
+                </p>
+            </div>
+
+            <a href="/Testimonial/CreateTestimonial/"
+               class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-background-dark rounded-lg font-bold text-sm hover:opacity-90 transition-opacity">
+                <span class="material-symbols-outlined text-[20px]">add</span>
+                Yeni Yorum Ekle
+            </a>
+        </div>
+
+        <!-- Table Card -->
+        <div class="bg-white dark:bg-[#111618] rounded-xl border border-slate-200 dark:border-[#3b4d54] overflow-hidden shadow-sm">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 dark:bg-[#1c2427] border-b border-slate-200 dark:border-[#3b4d54]">
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">#</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">Kişi</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">Yorum</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">Görseller</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">Durum</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9] text-right">Sil</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9] text-right">Güncelle</th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="divide-y divide-slate-200 dark:divide-[#3b4d54]">
+                        @foreach (var item in Model)
+                        {
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-white/5 transition-colors">
+                                <td class="px-6 py-5 font-semibold text-sm">@item.TestimonialId</td>
+
+                                <!-- Person -->
+                                <td class="px-6 py-5">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-lg overflow-hidden border border-slate-200 dark:border-[#283539] bg-slate-100 dark:bg-[#1c2427] flex items-center justify-center">
+                                            @if (!string.IsNullOrWhiteSpace(item.ImageUrl))
+                                            {
+                                                <img src="@item.ImageUrl" alt="avatar" class="w-full h-full object-cover" />
+                                            }
+                                            else
+                                            {
+                                                <span class="material-symbols-outlined text-slate-400">person</span>
+                                            }
+                                        </div>
+
+                                        <div class="flex flex-col">
+                                            <span class="font-bold text-sm">@item.NameSurname</span>
+                                            <span class="text-xs text-slate-500 dark:text-[#9db2b9]">@item.TitleAndCompany</span>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <!-- Comment -->
+                                <td class="px-6 py-5">
+                                    <p class="text-sm text-slate-700 dark:text-slate-300 line-clamp-2 max-w-xl">
+                                        @item.CommentDetail
+                                    </p>
+                                </td>
+
+                                <!-- Images -->
+                                <td class="px-6 py-5">
+                                    <div class="flex items-center gap-2">
+                                        @if (!string.IsNullOrWhiteSpace(item.ImageUrl))
+                                        {
+                                            <a href="@item.ImageUrl" target="_blank"
+                                               class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-[#1c2427] border border-slate-200 dark:border-[#283539] text-xs font-bold hover:bg-slate-200 dark:hover:bg-[#283539] transition-colors">
+                                                <span class="material-symbols-outlined text-[16px]">account_circle</span>
+                                                Profil
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40 text-xs font-bold text-amber-700 dark:text-amber-300">
+                                                <span class="material-symbols-outlined text-[16px]">warning</span>
+                                                Profil yok
+                                            </span>
+                                        }
+
+                                        @if (!string.IsNullOrWhiteSpace(item.BackgroundUrl))
+                                        {
+                                            <a href="@item.BackgroundUrl" target="_blank"
+                                               class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-[#1c2427] border border-slate-200 dark:border-[#283539] text-xs font-bold hover:bg-slate-200 dark:hover:bg-[#283539] transition-colors">
+                                                <span class="material-symbols-outlined text-[16px]">image</span>
+                                                Arkaplan
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100/60 dark:bg-[#1c2427]/60 border border-slate-200 dark:border-[#283539] text-xs font-bold text-slate-500 dark:text-[#9db2b9]">
+                                                <span class="material-symbols-outlined text-[16px]">hide_image</span>
+                                                Arkaplan yok
+                                            </span>
+                                        }
+                                    </div>
+                                </td>
+
+                                <!-- Status -->
+                                <td class="px-6 py-5">
+                                    <div class="flex items-center gap-2">
+                                        @if (item.IsConfirm)
+                                        {
+                                            <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-900/40 text-xs font-bold text-green-700 dark:text-green-300">
+                                                <span class="material-symbols-outlined text-[16px]">verified</span>
+                                                Onaylı
+                                            </span>
+
+                                            <a href="/Testimonial/ToggleConfirm/@item.TestimonialId"
+                                               class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-[#1c2427] border border-slate-200 dark:border-[#283539] text-xs font-bold hover:bg-slate-200 dark:hover:bg-[#283539] transition-colors">
+                                                <span class="material-symbols-outlined text-[16px]">toggle_off</span>
+                                                Pasifleştir
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40 text-xs font-bold text-amber-700 dark:text-amber-300">
+                                                <span class="material-symbols-outlined text-[16px]">hourglass_empty</span>
+                                                Beklemede
+                                            </span>
+
+                                            <a href="/Testimonial/ToggleConfirm/@item.TestimonialId"
+                                               class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary text-background-dark text-xs font-bold hover:opacity-90 transition-opacity">
+                                                <span class="material-symbols-outlined text-[16px]">check_circle</span>
+                                                Onayla
+                                            </a>
+                                        }
+                                    </div>
+                                </td>
+
+                                <!-- Delete -->
+                                <td class="px-6 py-5 text-right">
+                                    <a href="/Testimonial/DeleteTestimonial/@item.TestimonialId"
+                                       class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg font-bold text-xs transition-colors">
+                                        <span class="material-symbols-outlined text-[16px]">delete</span>
+                                        Sil
+                                    </a>
+                                </td>
+
+                                <!-- Update -->
+                                <td class="px-6 py-5 text-right">
+                                    <a href="/Testimonial/UpdateTestimonial/@item.TestimonialId"
+                                       class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white rounded-lg font-bold text-xs transition-colors">
+                                        <span class="material-symbols-outlined text-[16px]">edit</span>
+                                        Güncelle
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="px-6 py-4 bg-slate-50/30 dark:bg-[#1c2427]/30 border-t border-slate-200 dark:border-[#3b4d54] flex items-center justify-between">
+                <p class="text-xs text-slate-500 dark:text-[#9db2b9]">Toplam @Model.Count Yorum Bulundu.</p>
+
+                <div class="text-xs text-slate-500 dark:text-[#9db2b9]">
+                    Onaylı: <span class="font-bold">@Model.Count(x => x.IsConfirm)</span>
+                    <span class="mx-2">•</span>
+                    Beklemede: <span class="font-bold">@Model.Count(x => !x.IsConfirm)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Card -->
+        <div class="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/50 rounded-xl p-6">
+            <div class="flex gap-3">
+                <span class="material-symbols-outlined text-blue-600 dark:text-blue-400 text-[24px]">info</span>
+                <div>
+                    <h4 class="font-bold text-blue-900 dark:text-blue-300 mb-1">İpucu</h4>
+                    <p class="text-sm text-blue-800 dark:text-blue-400">
+                        ImageUrl ve BackgroundUrl alanlarına tam bir URL girerseniz burada “Profil / Arkaplan” olarak linkli önizleme çıkar.
+                        IsConfirm alanı ise listede “Onaylı / Beklemede” olarak gösterilir.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,295 @@
+﻿@model ResumeProjectDemo.Entities.Testimonial
+@{
+    ViewData["Title"] = "CreateTestimonial";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="flex-1 overflow-y-auto p-8">
+    <div class="max-w-6xl mx-auto space-y-8">
+
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <h3 class="text-3xl font-black tracking-tight">Yeni Yorum Ekle</h3>
+                <p class="text-slate-500 dark:text-[#9db2b9] mt-1">
+                    Referans/yorum bilgilerini girip kaydedebilirsiniz. Görseller için URL girerseniz canlı önizleme oluşur.
+                </p>
+            </div>
+
+            <a href="/Testimonial/TestimonialList"
+               class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 dark:border-[#283539]
+                      text-sm font-bold hover:bg-slate-100 dark:hover:bg-[#283539] transition-colors">
+                <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+                Listeye Dön
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- FORM -->
+            <div class="lg:col-span-2 bg-white dark:bg-[#111618] rounded-xl border border-slate-200 dark:border-[#3b4d54] overflow-hidden shadow-sm">
+                <form method="post" class="p-6 space-y-6">
+
+                    <!-- NameSurname + TitleAndCompany -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 dark:text-slate-200 mb-2">Ad Soyad</label>
+                            <input asp-for="NameSurname" id="tName"
+                                   placeholder="Örn: Ahmet Yılmaz"
+                                   class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-[#283539]
+                                          bg-white dark:bg-[#0f1416] text-slate-900 dark:text-slate-100
+                                          focus:outline-none focus:ring-2 focus:ring-primary/40" />
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 dark:text-slate-200 mb-2">Ünvan / Şirket</label>
+                            <input asp-for="TitleAndCompany" id="tTitle"
+                                   placeholder="Örn: TechNova / Yazılım"
+                                   class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-[#283539]
+                                          bg-white dark:bg-[#0f1416] text-slate-900 dark:text-slate-100
+                                          focus:outline-none focus:ring-2 focus:ring-primary/40" />
+                        </div>
+                    </div>
+
+                    <!-- Comment -->
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 dark:text-slate-200 mb-2">Yorum</label>
+                        <textarea asp-for="CommentDetail" id="tComment" rows="5"
+                                  placeholder="Yorum metnini buraya yazın..."
+                                  class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-[#283539]
+                                         bg-white dark:bg-[#0f1416] text-slate-900 dark:text-slate-100
+                                         focus:outline-none focus:ring-2 focus:ring-primary/40"></textarea>
+                        <p class="text-xs text-slate-500 dark:text-[#9db2b9] mt-2">
+                            Kısa ve net yorumlar slider’da daha iyi görünür.
+                        </p>
+                    </div>
+
+                    <!-- Images -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 dark:text-slate-200 mb-2">Profil Görsel URL</label>
+                            <input asp-for="ImageUrl" id="tImage"
+                                   placeholder="https://..."
+                                   class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-[#283539]
+                                          bg-white dark:bg-[#0f1416] text-slate-900 dark:text-slate-100
+                                          focus:outline-none focus:ring-2 focus:ring-primary/40" />
+                            <p class="text-xs text-slate-500 dark:text-[#9db2b9] mt-2">
+                                Avatar için kare/portre görseller önerilir.
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 dark:text-slate-200 mb-2">Arkaplan URL</label>
+                            <input asp-for="BackgroundUrl" id="tBg"
+                                   placeholder="https://..."
+                                   class="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-[#283539]
+                                          bg-white dark:bg-[#0f1416] text-slate-900 dark:text-slate-100
+                                          focus:outline-none focus:ring-2 focus:ring-primary/40" />
+                            <p class="text-xs text-slate-500 dark:text-[#9db2b9] mt-2">
+                                Slider arkaplanı için yüksek çözünürlük daha iyi görünür.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- IsConfirm -->
+                    <div class="flex items-center justify-between p-4 rounded-lg border border-slate-200 dark:border-[#283539] bg-slate-50/50 dark:bg-[#0f1416]">
+                        <div class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-primary text-[22px]">verified</span>
+                            <div>
+                                <p class="font-bold text-sm text-slate-800 dark:text-slate-100">Onay Durumu</p>
+                                <p class="text-xs text-slate-500 dark:text-[#9db2b9]">
+                                    Açık olursa yorum sitede görünür (IsConfirm = true).
+                                </p>
+                            </div>
+                        </div>
+
+                        <label class="inline-flex items-center cursor-pointer select-none">
+                            <input asp-for="IsConfirm" id="tConfirm" type="checkbox" class="sr-only peer" />
+                            <div class="w-11 h-6 bg-slate-300 dark:bg-[#283539] peer-focus:outline-none rounded-full peer
+                                        peer-checked:bg-primary relative transition-colors">
+                                <div class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-all
+                                            peer-checked:translate-x-5"></div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="pt-2 flex flex-col sm:flex-row gap-3 sm:justify-end">
+                        <a href="/Testimonial/TestimonialList"
+                           class="inline-flex justify-center items-center gap-2 px-5 py-2.5 rounded-lg
+                                  border border-slate-200 dark:border-[#283539]
+                                  text-sm font-bold hover:bg-slate-100 dark:hover:bg-[#283539] transition-colors">
+                            İptal
+                        </a>
+
+                        <button type="submit"
+                                class="inline-flex justify-center items-center gap-2 px-5 py-2.5 bg-primary text-background-dark
+                                       rounded-lg font-bold text-sm hover:opacity-90 transition-opacity">
+                            <span class="material-symbols-outlined text-[20px]">save</span>
+                            Kaydet
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- LIVE PREVIEW -->
+            <div class="bg-white dark:bg-[#111618] rounded-xl border border-slate-200 dark:border-[#3b4d54] overflow-hidden shadow-sm">
+                <div class="p-6 border-b border-slate-200 dark:border-[#3b4d54]">
+                    <h4 class="text-lg font-black">Canlı Önizleme</h4>
+                    <p class="text-xs text-slate-500 dark:text-[#9db2b9] mt-1">
+                        Girdiğin bilgiler, sitedeki testimonial görünümüne yakın şekilde burada gösterilir.
+                    </p>
+                </div>
+
+                <div class="p-6 space-y-4">
+                    <!-- Background preview -->
+                    <div class="relative rounded-xl overflow-hidden border border-slate-200 dark:border-[#283539]">
+                        <div id="bgPreview"
+                             class="h-40 bg-slate-200 dark:bg-[#0f1416] bg-cover bg-center flex items-center justify-center">
+                            <span class="text-xs font-bold text-slate-600 dark:text-[#9db2b9]">
+                                Arkaplan önizleme
+                            </span>
+                        </div>
+
+                        <div class="absolute inset-0 bg-black/35"></div>
+
+                        <div class="absolute left-4 bottom-4 right-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-xl overflow-hidden border border-white/30 bg-white/10 flex items-center justify-center">
+                                    <img id="imgPreview" src="" alt="avatar" class="w-full h-full object-cover hidden" />
+                                    <span id="imgFallback" class="material-symbols-outlined text-white/80">person</span>
+                                </div>
+
+                                <div class="text-white">
+                                    <p id="namePreview" class="font-black leading-tight">Ad Soyad</p>
+                                    <p id="titlePreview" class="text-xs text-white/80">Ünvan / Şirket</p>
+                                </div>
+
+                                <div class="ml-auto">
+                                    <span id="confirmBadge"
+                                          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold
+                                                 bg-amber-50/90 text-amber-800">
+                                        <span class="material-symbols-outlined text-[16px]">hourglass_empty</span>
+                                        Beklemede
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comment preview -->
+                    <div class="rounded-xl border border-slate-200 dark:border-[#283539] p-4 bg-slate-50/50 dark:bg-[#0f1416]">
+                        <div class="flex items-center gap-2 text-slate-500 dark:text-[#9db2b9]">
+                            <span class="material-symbols-outlined text-[18px]">format_quote</span>
+                            <span class="text-xs font-bold">Yorum</span>
+                        </div>
+                        <p id="commentPreview" class="mt-2 text-sm text-slate-800 dark:text-slate-200 line-clamp-5">
+                            Yorum metni burada görünecek.
+                        </p>
+                    </div>
+
+                    <div class="text-[11px] text-slate-500 dark:text-[#9db2b9]">
+                        * Bu önizleme sadece admin panel için; asıl slider tasarımın front tarafındaki component’e bağlıdır.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Info -->
+        <div class="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/50 rounded-xl p-6">
+            <div class="flex gap-3">
+                <span class="material-symbols-outlined text-blue-600 dark:text-blue-400 text-[24px]">info</span>
+                <div>
+                    <h4 class="font-bold text-blue-900 dark:text-blue-300 mb-1">İpucu</h4>
+                    <p class="text-sm text-blue-800 dark:text-blue-400">
+                        Pasif yaptığın yorumların sitede görünmemesi için, front taraftaki testimonial component’te
+                        sadece <span class="font-bold">IsConfirm == true</span> olanları listelemelisin.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    (function () {
+        const nameEl = document.getElementById("tName");
+        const titleEl = document.getElementById("tTitle");
+        const commentEl = document.getElementById("tComment");
+        const imageEl = document.getElementById("tImage");
+        const bgEl = document.getElementById("tBg");
+        const confirmEl = document.getElementById("tConfirm");
+
+        const namePreview = document.getElementById("namePreview");
+        const titlePreview = document.getElementById("titlePreview");
+        const commentPreview = document.getElementById("commentPreview");
+        const bgPreview = document.getElementById("bgPreview");
+
+        const imgPreview = document.getElementById("imgPreview");
+        const imgFallback = document.getElementById("imgFallback");
+
+        const confirmBadge = document.getElementById("confirmBadge");
+
+        function setBadge(isConfirm) {
+            if (isConfirm) {
+                confirmBadge.className =
+                    "inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold bg-green-50/90 text-green-800";
+                confirmBadge.innerHTML =
+                    '<span class="material-symbols-outlined text-[16px]">verified</span> Onaylı';
+            } else {
+                confirmBadge.className =
+                    "inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold bg-amber-50/90 text-amber-800";
+                confirmBadge.innerHTML =
+                    '<span class="material-symbols-outlined text-[16px]">hourglass_empty</span> Beklemede';
+            }
+        }
+
+        function safeText(v, fallback) {
+            const t = (v || "").trim();
+            return t.length ? t : fallback;
+        }
+
+        function updatePreview() {
+            namePreview.textContent = safeText(nameEl.value, "Ad Soyad");
+            titlePreview.textContent = safeText(titleEl.value, "Ünvan / Şirket");
+            commentPreview.textContent = safeText(commentEl.value, "Yorum metni burada görünecek.");
+
+            const bg = (bgEl.value || "").trim();
+            if (bg) {
+                bgPreview.style.backgroundImage = `url('${bg}')`;
+            } else {
+                bgPreview.style.backgroundImage = "none";
+            }
+
+            const img = (imageEl.value || "").trim();
+            if (img) {
+                imgPreview.src = img;
+                imgPreview.classList.remove("hidden");
+                imgFallback.classList.add("hidden");
+                imgPreview.onerror = function () {
+                    imgPreview.classList.add("hidden");
+                    imgFallback.classList.remove("hidden");
+                };
+            } else {
+                imgPreview.classList.add("hidden");
+                imgFallback.classList.remove("hidden");
+            }
+
+            setBadge(confirmEl.checked);
+        }
+
+        ["input", "change"].forEach(evt => {
+            nameEl.addEventListener(evt, updatePreview);
+            titleEl.addEventListener(evt, updatePreview);
+            commentEl.addEventListener(evt, updatePreview);
+            imageEl.addEventListener(evt, updatePreview);
+            bgEl.addEventListener(evt, updatePreview);
+            confirmEl.addEventListener(evt, updatePreview);
+        });
+
+        updatePreview();
+    })();
+</script>

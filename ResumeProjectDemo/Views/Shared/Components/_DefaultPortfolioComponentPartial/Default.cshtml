@@ -1,0 +1,26 @@
+﻿@model List<ResumeProjectDemo.Entities.Portfolio>
+
+<section id="portfolio">
+    @await Component.InvokeAsync("_DefaultCategoriesComponentPartial")
+	<div class="container">
+		<div class="portfolio-container isotope-container row my-n2 mx-sm-n2">
+			@foreach (var item in Model)
+			{
+				<div class="isotope-item col-sm-6 col-lg-4 py-2 px-sm-2 @item.Category.Slug">
+					<div class="portfolio-item details-inside">
+						<a href="@item.ProjeUrl" target="_blank">
+							<div class="item-media">
+								<img src="@item.ImageUrl" alt="">
+							</div>
+							<div class="item-overlay bg-dark"></div>
+							<div class="item-details">
+								<h4 class="h5">@item.Title</h4>
+								<p class="font-italic">@item.Category.CategoryName</p>
+							</div>
+						</a>
+					</div>
+				</div>
+			}
+		</div><!-- .portfolio-container end -->
+	</div>
+</section>

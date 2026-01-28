@@ -1,0 +1,9 @@
+﻿@model List<ResumeProjectDemo.Entities.MyWorkingLife>
+
+<h4 class="mb-4">İş Hayatım</h4>
+
+@foreach (var item in Model)
+{
+    <p class="h5">@item.Title</p>
+    <p>@item.Description</p>
+}

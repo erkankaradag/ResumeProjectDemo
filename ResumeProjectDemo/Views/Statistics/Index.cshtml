@@ -1,0 +1,355 @@
+﻿@{
+    ViewData["Title"] = "İstatistik Paneli";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+
+    // Güvenli fallback (ViewBag boş gelirse hata vermesin)
+    int about = ViewBag.AboutCount ?? 0;
+    int exp = ViewBag.ExperienceCount ?? 0;
+    int portfolio = ViewBag.PortfolioCount ?? 0;
+    int service = ViewBag.ServiceCount ?? 0;
+    int skill = ViewBag.SkillCount ?? 0;
+
+    int msgTotal = ViewBag.MessageCount ?? 0;
+    int msgUnread = ViewBag.MessageUnreadCount ?? 0;
+    int msgRead = ViewBag.MessageReadCount ?? 0;
+
+    int testTotal = ViewBag.TestimonialCount ?? 0;
+    int testApproved = ViewBag.TestimonialApprovedCount ?? 0;
+    int testPending = ViewBag.TestimonialPendingCount ?? 0;
+
+    // Grafik dataları (controller’dan geliyorsa onu kullanır, yoksa buradan üretir)
+    var chartLabels = ViewBag.ChartLabels ?? new[] { "About", "Experience", "Portfolio", "Service", "Skill", "Testimonial", "Message" };
+    var chartData = ViewBag.ChartData ?? new[] { about, exp, portfolio, service, skill, testTotal, msgTotal };
+
+    var tDonutLabels = ViewBag.TestimonialDonutLabels ?? new[] { "Onaylı", "Beklemede" };
+    var tDonutData = ViewBag.TestimonialDonutData ?? new[] { testApproved, testPending };
+
+    var mDonutLabels = ViewBag.MessageDonutLabels ?? new[] { "Okunmuş", "Okunmamış" };
+    var mDonutData = ViewBag.MessageDonutData ?? new[] { msgRead, msgUnread };
+
+    string today = DateTime.Now.ToString("dd MMMM yyyy, dddd", new System.Globalization.CultureInfo("tr-TR"));
+}
+
+<div class="flex-1 overflow-y-auto p-8">
+    <div class="max-w-7xl mx-auto space-y-8">
+
+        <!-- Header -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div>
+                <h3 class="text-3xl font-black tracking-tight">İstatistik & Kontrol Paneli</h3>
+                <p class="text-slate-500 dark:text-[#9db2b9] mt-1">
+                    About, Experience, Message, Portfolio, Service, Skill ve Testimonial verilerini tek ekranda özetleyin.
+                </p>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <div class="px-4 py-2 rounded-xl border border-slate-200 dark:border-[#283539] bg-white dark:bg-[#111618]">
+                    <p class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">Bugün</p>
+                    <p class="text-sm font-black">@today</p>
+                </div>
+
+                <a href="/Message/MessageList"
+                   class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-background-dark rounded-lg font-bold text-sm hover:opacity-90 transition-opacity">
+                    <span class="material-symbols-outlined text-[20px]">mail</span>
+                    Mesajlar
+                </a>
+            </div>
+        </div>
+
+        <!-- Top Stat Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div class="rounded-2xl border border-slate-200 dark:border-[#283539] bg-white dark:bg-[#111618] p-5 shadow-sm">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">Toplam Proje</p>
+                        <p class="text-3xl font-black mt-1">@portfolio</p>
+                        <p class="text-xs text-slate-500 dark:text-[#9db2b9] mt-2">Portfolio kayıt sayısı</p>
+                    </div>
+                    <span class="material-symbols-outlined text-primary text-[26px]">school</span>
+                </div>
+                <div class="mt-4 h-2 rounded-full bg-slate-100 dark:bg-[#0f1416] border border-slate-200 dark:border-[#283539] overflow-hidden">
+                    <div class="h-full bg-primary" style="width:@(Math.Min(100, portfolio * 8))%"></div>
+                </div>
+            </div>
+
+            <div class="rounded-2xl border border-slate-200 dark:border-[#283539] bg-white dark:bg-[#111618] p-5 shadow-sm">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">Toplam Yetenek</p>
+                        <p class="text-3xl font-black mt-1">@skill</p>
+                        <p class="text-xs text-slate-500 dark:text-[#9db2b9] mt-2">Skill kayıt sayısı</p>
+                    </div>
+                    <span class="material-symbols-outlined text-primary text-[26px]">psychology</span>
+                </div>
+                <div class="mt-4 h-2 rounded-full bg-slate-100 dark:bg-[#0f1416] border border-slate-200 dark:border-[#283539] overflow-hidden">
+                    <div class="h-full bg-primary" style="width:@(Math.Min(100, skill * 10))%"></div>
+                </div>
+            </div>
+
+            <div class="rounded-2xl border border-slate-200 dark:border-[#283539] bg-white dark:bg-[#111618] p-5 shadow-sm">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">Gelen Mesaj</p>
+                        <p class="text-3xl font-black mt-1">@msgTotal</p>
+                        <p class="text-xs text-slate-500 dark:text-[#9db2b9] mt-2">
+                            Okunmamış: <span class="font-black text-primary">@msgUnread</span>
+                        </p>
+                    </div>
+                    <span class="material-symbols-outlined text-primary text-[26px]">mail</span>
+                </div>
+                <div class="mt-4 flex gap-2">
+                    <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40 text-amber-700 dark:text-amber-300">
+                        <span class="material-symbols-outlined text-[16px]">mark_email_unread</span>
+                        Okunmamış @msgUnread
+                    </span>
+                    <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-900/40 text-green-700 dark:text-green-300">
+                        <span class="material-symbols-outlined text-[16px]">mark_email_read</span>
+                        Okunmuş @msgRead
+                    </span>
+                </div>
+            </div>
+
+            <div class="rounded-2xl border border-slate-200 dark:border-[#283539] bg-white dark:bg-[#111618] p-5 shadow-sm">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">Referans / Yorum</p>
+                        <p class="text-3xl font-black mt-1">@testTotal</p>
+                        <p class="text-xs text-slate-500 dark:text-[#9db2b9] mt-2">
+                            Onaylı: <span class="font-black text-primary">@testApproved</span> • Beklemede: <span class="font-black">@testPending</span>
+                        </p>
+                    </div>
+                    <span class="material-symbols-outlined text-primary text-[26px]">verified</span>
+                </div>
+                <div class="mt-4 h-2 rounded-full bg-slate-100 dark:bg-[#0f1416] border border-slate-200 dark:border-[#283539] overflow-hidden">
+                    @{
+                        var ratio = testTotal == 0 ? 0 : (int)Math.Round((double)testApproved / testTotal * 100);
+                    }
+                    <div class="h-full bg-primary" style="width:@ratio%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Middle Grid -->
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
+
+            <!-- Big Chart -->
+            <div class="xl:col-span-2 rounded-2xl border border-slate-200 dark:border-[#283539] bg-white dark:bg-[#111618] p-6 shadow-sm">
+                <div class="flex items-center justify-between gap-3">
+                    <div>
+                        <h4 class="text-lg font-black">Genel Dağılım Grafiği</h4>
+                        <p class="text-sm text-slate-500 dark:text-[#9db2b9] mt-1">
+                            Tüm modüllerin sayısal durumunu tek grafikte gör.
+                        </p>
+                    </div>
+                    <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-primary/15 dark:bg-primary/20 text-primary">
+                        <span class="material-symbols-outlined text-[16px]">query_stats</span>
+                        Canlı Özet
+                    </span>
+                </div>
+
+                <div class="mt-5 rounded-xl border border-slate-200 dark:border-[#283539] bg-slate-50/30 dark:bg-[#1c2427]/30 p-4">
+                    <canvas id="overallChart" height="120"></canvas>
+                </div>
+
+                <div class="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <a href="/About/AboutList" class="rounded-xl border border-slate-200 dark:border-[#283539] bg-white dark:bg-[#111618] p-3 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+                        <p class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">About</p>
+                        <p class="text-xl font-black">@about</p>
+                    </a>
+                    <a href="/Experience/ExperienceList" class="rounded-xl border border-slate-200 dark:border-[#283539] bg-white dark:bg-[#111618] p-3 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+                        <p class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">Experience</p>
+                        <p class="text-xl font-black">@exp</p>
+                    </a>
+                    <a href="/Service/ServiceList" class="rounded-xl border border-slate-200 dark:border-[#283539] bg-white dark:bg-[#111618] p-3 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+                        <p class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">Service</p>
+                        <p class="text-xl font-black">@service</p>
+                    </a>
+                    <a href="/Skill/SkillList" class="rounded-xl border border-slate-200 dark:border-[#283539] bg-white dark:bg-[#111618] p-3 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+                        <p class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">Skill</p>
+                        <p class="text-xl font-black">@skill</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Column: Donuts + Quick Actions -->
+            <div class="space-y-4">
+
+                <!-- Message donut -->
+                <div class="rounded-2xl border border-slate-200 dark:border-[#283539] bg-white dark:bg-[#111618] p-6 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h4 class="text-lg font-black">Mesaj Durumu</h4>
+                            <p class="text-sm text-slate-500 dark:text-[#9db2b9] mt-1">Okunmuş / Okunmamış</p>
+                        </div>
+                        <span class="material-symbols-outlined text-primary">donut_small</span>
+                    </div>
+                    <div class="mt-4 rounded-xl border border-slate-200 dark:border-[#283539] bg-slate-50/30 dark:bg-[#1c2427]/30 p-4">
+                        <canvas id="messageDonut" height="160"></canvas>
+                    </div>
+                </div>
+
+                <!-- Testimonial donut -->
+                <div class="rounded-2xl border border-slate-200 dark:border-[#283539] bg-white dark:bg-[#111618] p-6 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h4 class="text-lg font-black">Yorum Onayı</h4>
+                            <p class="text-sm text-slate-500 dark:text-[#9db2b9] mt-1">Onaylı / Beklemede</p>
+                        </div>
+                        <span class="material-symbols-outlined text-primary">verified</span>
+                    </div>
+                    <div class="mt-4 rounded-xl border border-slate-200 dark:border-[#283539] bg-slate-50/30 dark:bg-[#1c2427]/30 p-4">
+                        <canvas id="testimonialDonut" height="160"></canvas>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="rounded-2xl border border-slate-200 dark:border-[#283539] bg-white dark:bg-[#111618] p-6 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h4 class="text-lg font-black">Hızlı İşlemler</h4>
+                            <p class="text-sm text-slate-500 dark:text-[#9db2b9] mt-1">Sık kullanılan kısayollar</p>
+                        </div>
+                        <span class="material-symbols-outlined text-primary">bolt</span>
+                    </div>
+
+                    <div class="mt-4 space-y-2">
+                        <a href="/Portfolio/CreatePortfolio"
+                           class="flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-slate-200 dark:border-[#283539] hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <span class="material-symbols-outlined text-primary">add</span>
+                                <div>
+                                    <p class="text-sm font-black">Yeni Proje Ekle</p>
+                                    <p class="text-xs text-slate-500 dark:text-[#9db2b9]">Portfolio kaydı oluştur</p>
+                                </div>
+                            </div>
+                            <span class="material-symbols-outlined text-slate-400">chevron_right</span>
+                        </a>
+
+                        <a href="/Skill/CreateSkill"
+                           class="flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-slate-200 dark:border-[#283539] hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <span class="material-symbols-outlined text-primary">psychology</span>
+                                <div>
+                                    <p class="text-sm font-black">Yeni Yetenek Ekle</p>
+                                    <p class="text-xs text-slate-500 dark:text-[#9db2b9]">Skill seviyeni güncelle</p>
+                                </div>
+                            </div>
+                            <span class="material-symbols-outlined text-slate-400">chevron_right</span>
+                        </a>
+
+                        <a href="/Testimonial/TestimonialList"
+                           class="flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-slate-200 dark:border-[#283539] hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <span class="material-symbols-outlined text-primary">verified</span>
+                                <div>
+                                    <p class="text-sm font-black">Yorumları Yönet</p>
+                                    <p class="text-xs text-slate-500 dark:text-[#9db2b9]">Onay durumunu değiştir</p>
+                                </div>
+                            </div>
+                            <span class="material-symbols-outlined text-slate-400">chevron_right</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Info -->
+        <div class="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/50 rounded-2xl p-6">
+            <div class="flex gap-3">
+                <span class="material-symbols-outlined text-blue-600 dark:text-blue-400 text-[24px]">info</span>
+                <div>
+                    <h4 class="font-black text-blue-900 dark:text-blue-300 mb-1">Not</h4>
+                    <p class="text-sm text-blue-800 dark:text-blue-400">
+                        Bu sayfa <span class="font-bold">StatisticsController/Index</span> üzerinden gelen <span class="font-bold">ViewBag</span> verilerini kullanır.
+                        İstersen grafiğe zaman bazlı veri de ekleyip (son 7 gün mesaj/yorum) trend grafiği yapabiliriz.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // --- Server data ---
+    const overallLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(chartLabels));
+    const overallData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(chartData));
+
+    const msgDonutLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(mDonutLabels));
+    const msgDonutData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(mDonutData));
+
+    const tDonutLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(tDonutLabels));
+    const tDonutData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(tDonutData));
+
+    // --- Theme helpers (dark/light grid colors) ---
+    const isDark = document.documentElement.classList.contains('dark');
+    const gridColor = isDark ? 'rgba(255,255,255,.08)' : 'rgba(15,23,42,.08)';
+    const tickColor = isDark ? 'rgba(255,255,255,.65)' : 'rgba(15,23,42,.65)';
+
+    // --- Overall bar chart ---
+    new Chart(document.getElementById('overallChart'), {
+        type: 'bar',
+        data: {
+            labels: overallLabels,
+            datasets: [{
+                label: 'Kayıt Sayısı',
+                data: overallData,
+                borderWidth: 1,
+                borderRadius: 10
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: { enabled: true }
+            },
+            scales: {
+                x: {
+                    grid: { color: gridColor },
+                    ticks: { color: tickColor }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: { color: gridColor },
+                    ticks: { color: tickColor, precision: 0 }
+                }
+            }
+        }
+    });
+
+    // --- Message donut ---
+    new Chart(document.getElementById('messageDonut'), {
+        type: 'doughnut',
+        data: {
+            labels: msgDonutLabels,
+            datasets: [{
+                data: msgDonutData,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { position: 'bottom', labels: { color: tickColor } } }
+        }
+    });
+
+    // --- Testimonial donut ---
+    new Chart(document.getElementById('testimonialDonut'), {
+        type: 'doughnut',
+        data: {
+            labels: tDonutLabels,
+            datasets: [{
+                data: tDonutData,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { position: 'bottom', labels: { color: tickColor } } }
+        }
+    });
+</script>

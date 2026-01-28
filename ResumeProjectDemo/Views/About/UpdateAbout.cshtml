@@ -1,0 +1,221 @@
+﻿@model ResumeProjectDemo.Entities.About
+@{
+    ViewData["Title"] = "UpdateAbout";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="flex-1 overflow-y-auto p-8">
+    <div class="max-w-4xl mx-auto space-y-8">
+
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <h3 class="text-3xl font-black tracking-tight">Hakkımda Güncelle</h3>
+                <p class="text-slate-500 dark:text-[#9db2b9] mt-1">
+                    Mevcut kaydı düzenleyin ve değişiklikleri kaydedin.
+                </p>
+            </div>
+
+            <a href="/About/AboutList"
+               class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 dark:border-[#3b4d54]
+                      text-sm font-bold text-slate-700 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+                <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+                Listeye Dön
+            </a>
+        </div>
+
+        <form method="post" class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+            <!-- Hidden ID -->
+            <input type="hidden" asp-for="AboutId" />
+
+            <!-- Form -->
+            <div class="lg:col-span-3 bg-white dark:bg-[#111618] rounded-xl border border-slate-200 dark:border-[#3b4d54] shadow-sm overflow-hidden">
+                <div class="p-6 border-b border-slate-200 dark:border-[#3b4d54] flex items-start justify-between gap-4">
+                    <div>
+                        <h4 class="text-lg font-black tracking-tight">Bilgiler</h4>
+                        <p class="text-sm text-slate-500 dark:text-[#9db2b9] mt-1">
+                            Alanları güncelleyin ve kaydedin.
+                        </p>
+                    </div>
+
+                    <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-primary/15 dark:bg-primary/20 text-primary">
+                        <span class="material-symbols-outlined text-[16px]">edit</span>
+                        Düzenleme Modu
+                    </span>
+                </div>
+
+                <div class="p-6 space-y-5">
+
+                    <!-- NameSurname -->
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">
+                            Ad Soyad
+                        </label>
+                        <input asp-for="NameSurname" id="inputName"
+                               placeholder="Örn: Erkan Karadağ"
+                               class="w-full rounded-lg border border-slate-200 dark:border-[#3b4d54]
+                                      bg-white dark:bg-[#0f1416] px-4 py-3 text-sm font-semibold
+                                      placeholder:text-slate-400 dark:placeholder:text-[#6f8790]
+                                      focus:outline-none focus:ring-2 focus:ring-primary/40" />
+                    </div>
+
+                    <!-- Title -->
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">
+                            Ünvan
+                        </label>
+                        <input asp-for="Title" id="inputTitle"
+                               placeholder="Örn: Junior .NET Developer"
+                               class="w-full rounded-lg border border-slate-200 dark:border-[#3b4d54]
+                                      bg-white dark:bg-[#0f1416] px-4 py-3 text-sm font-semibold
+                                      placeholder:text-slate-400 dark:placeholder:text-[#6f8790]
+                                      focus:outline-none focus:ring-2 focus:ring-primary/40" />
+                    </div>
+
+                    <!-- Description -->
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">
+                            Açıklama
+                        </label>
+                        <textarea asp-for="Description" id="inputDescription" rows="6"
+                                  placeholder="Kendinizi kısaca anlatın..."
+                                  class="w-full rounded-lg border border-slate-200 dark:border-[#3b4d54]
+                                         bg-white dark:bg-[#0f1416] px-4 py-3 text-sm font-semibold
+                                         placeholder:text-slate-400 dark:placeholder:text-[#6f8790]
+                                         focus:outline-none focus:ring-2 focus:ring-primary/40"></textarea>
+                        <p class="text-xs text-slate-500 dark:text-[#9db2b9]">
+                            İpucu: 2-4 cümle ideal.
+                        </p>
+                    </div>
+
+                    <!-- ImageUrl -->
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">
+                            Görsel URL
+                        </label>
+                        <input asp-for="ImageUrl" id="inputImageUrl"
+                               placeholder="https://..."
+                               class="w-full rounded-lg border border-slate-200 dark:border-[#3b4d54]
+                                      bg-white dark:bg-[#0f1416] px-4 py-3 text-sm font-semibold
+                                      placeholder:text-slate-400 dark:placeholder:text-[#6f8790]
+                                      focus:outline-none focus:ring-2 focus:ring-primary/40" />
+                        <p class="text-xs text-slate-500 dark:text-[#9db2b9]">
+                            URL geçersizse önizlemede görsel yerine ikon görünür.
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Actions -->
+                <div class="p-6 border-t border-slate-200 dark:border-[#3b4d54] flex items-center justify-between">
+                    <a href="/About/AboutList"
+                       class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 dark:border-[#3b4d54]
+                              text-sm font-bold text-slate-700 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">close</span>
+                        Vazgeç
+                    </a>
+
+                    <button type="submit"
+                            class="inline-flex items-center gap-2 px-5 py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-lg font-black text-sm transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">save</span>
+                        Güncellemeyi Kaydet
+                    </button>
+                </div>
+            </div>
+
+            <!-- Preview -->
+            <div class="lg:col-span-2 bg-white dark:bg-[#111618] rounded-xl border border-slate-200 dark:border-[#3b4d54] shadow-sm overflow-hidden">
+                <div class="p-6 border-b border-slate-200 dark:border-[#3b4d54]">
+                    <h4 class="text-lg font-black tracking-tight">Canlı Önizleme</h4>
+                    <p class="text-sm text-slate-500 dark:text-[#9db2b9] mt-1">
+                        Yazdıkça anında güncellenir.
+                    </p>
+                </div>
+
+                <div class="p-6 space-y-4">
+                    <!-- Image Preview -->
+                    <div id="previewImageBox"
+                         class="w-full aspect-[4/3] rounded-xl bg-slate-100 dark:bg-[#0f1416]
+                                border border-slate-200 dark:border-[#3b4d54]
+                                overflow-hidden flex items-center justify-center">
+
+                        <span id="previewImageIcon"
+                              class="material-symbols-outlined text-[40px] text-slate-400 dark:text-[#6f8790]">
+                            image
+                        </span>
+
+                        <img id="previewImage"
+                             class="hidden w-full h-full object-cover"
+                             alt="preview" />
+                    </div>
+
+                    <div class="space-y-1">
+                        <p class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">Ad Soyad</p>
+                        <p id="previewName" class="text-base font-black">—</p>
+                    </div>
+
+                    <div class="space-y-1">
+                        <p class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">Ünvan</p>
+                        <p id="previewTitle" class="text-sm font-semibold text-slate-600 dark:text-[#c7d7dc]">—</p>
+                    </div>
+
+                    <div class="space-y-1">
+                        <p class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#9db2b9]">Açıklama</p>
+                        <p id="previewDescription" class="text-sm text-slate-600 dark:text-[#c7d7dc]">—</p>
+                    </div>
+
+                    <div class="pt-2">
+                        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-primary/15 dark:bg-primary/20 text-primary">
+                            <span class="material-symbols-outlined text-[16px]">bolt</span>
+                            Live Preview
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script>
+    const nameInput = document.getElementById("inputName");
+    const titleInput = document.getElementById("inputTitle");
+    const descInput = document.getElementById("inputDescription");
+    const imageInput = document.getElementById("inputImageUrl");
+
+    const previewName = document.getElementById("previewName");
+    const previewTitle = document.getElementById("previewTitle");
+    const previewDesc = document.getElementById("previewDescription");
+    const previewImage = document.getElementById("previewImage");
+    const previewIcon = document.getElementById("previewImageIcon");
+
+    function refreshPreview() {
+        previewName.textContent = nameInput.value || "—";
+        previewTitle.textContent = titleInput.value || "—";
+        previewDesc.textContent = descInput.value || "—";
+
+        const url = (imageInput.value || "").trim();
+        if (url.length > 5) {
+            previewImage.src = url;
+            previewImage.classList.remove("hidden");
+            previewIcon.classList.add("hidden");
+        } else {
+            previewImage.classList.add("hidden");
+            previewIcon.classList.remove("hidden");
+        }
+    }
+
+    // initial preview from existing model values
+    refreshPreview();
+
+    nameInput.addEventListener("input", refreshPreview);
+    titleInput.addEventListener("input", refreshPreview);
+    descInput.addEventListener("input", refreshPreview);
+    imageInput.addEventListener("input", refreshPreview);
+
+    // if image url fails to load -> fallback icon
+    previewImage.addEventListener("error", () => {
+        previewImage.classList.add("hidden");
+        previewIcon.classList.remove("hidden");
+    });
+</script>

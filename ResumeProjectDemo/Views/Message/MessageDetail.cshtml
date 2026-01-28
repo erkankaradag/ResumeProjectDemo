@@ -1,0 +1,234 @@
+﻿@model ResumeProjectDemo.Entities.Message
+
+@{
+    ViewData["Title"] = "Mesaj Detayı";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<style>
+    :root {
+        --bg-card: #1a2332;
+        --bg-hover: #243447;
+        --accent: #00d9ff;
+        --accent-purple: #7c3aed;
+        --text: #e8ecf2;
+        --text-muted: #94a3b8;
+        --danger: #ef4444;
+        --ok: #22c55e;
+    }
+
+    .detail-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .detail-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .title {
+        font-size: 2rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--accent), var(--accent-purple));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .card {
+        background: var(--bg-card);
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,.1);
+        padding: 1.75rem;
+    }
+
+    .sender-box {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .avatar {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-purple));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        font-size: 1.2rem;
+        color: #061018;
+    }
+
+    .sender-name {
+        font-weight: 800;
+        font-size: 1.1rem;
+        color: var(--text);
+    }
+
+    .sender-email {
+        font-size: .85rem;
+        color: var(--text-muted);
+    }
+
+    .meta {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+    }
+
+    .meta-item {
+        font-size: .85rem;
+        color: var(--text-muted);
+    }
+
+    .badge {
+        padding: .35rem .7rem;
+        border-radius: 999px;
+        font-weight: 800;
+        font-size: .75rem;
+        display: inline-block;
+    }
+
+    .badge-read {
+        background: rgba(34,197,94,.15);
+        color: var(--ok);
+        border: 1px solid rgba(34,197,94,.3);
+    }
+
+    .badge-unread {
+        background: rgba(239,68,68,.15);
+        color: var(--danger);
+        border: 1px solid rgba(239,68,68,.3);
+    }
+
+    .subject {
+        font-size: 1.2rem;
+        font-weight: 800;
+        margin-bottom: .75rem;
+        color: var(--text);
+    }
+
+    .message-box {
+        background: rgba(255,255,255,.04);
+        border: 1px solid rgba(255,255,255,.08);
+        border-radius: 12px;
+        padding: 1.25rem;
+        font-size: .95rem;
+        color: var(--text);
+        line-height: 1.7;
+        white-space: pre-wrap;
+    }
+
+    .actions {
+        display: flex;
+        gap: .75rem;
+        justify-content: flex-end;
+        margin-top: 1.75rem;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: .65rem 1.2rem;
+        border-radius: 10px;
+        border: none;
+        font-weight: 800;
+        cursor: pointer;
+        transition: transform .15s, opacity .15s;
+    }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            opacity: .9;
+        }
+
+    .btn-back {
+        background: rgba(255,255,255,.08);
+        color: var(--text);
+    }
+
+    .btn-toggle {
+        background: linear-gradient(135deg, var(--accent), var(--accent-purple));
+        color: #061018;
+    }
+
+    .btn-delete {
+        background: rgba(239,68,68,.15);
+        color: var(--danger);
+        border: 1px solid rgba(239,68,68,.3);
+    }
+</style>
+
+<div class="detail-container">
+
+    <div class="detail-header">
+        <h1 class="title">Mesaj Detayı</h1>
+
+        <span class="badge @(Model.IsRead ? "badge-read" : "badge-unread")">
+            @(Model.IsRead ? "Okundu" : "Okunmadı")
+        </span>
+    </div>
+
+    <div class="card">
+
+        <div class="sender-box">
+            <div class="avatar">
+                @(Model.NameSurname?.Substring(0, 1).ToUpper())
+            </div>
+            <div>
+                <div class="sender-name">@Model.NameSurname</div>
+                <div class="sender-email">@Model.EmailAddress</div>
+            </div>
+        </div>
+
+        <div class="meta">
+            <div class="meta-item">
+                <strong>Tarih:</strong> @Model.SendDate.ToString("dd MMMM yyyy")
+            </div>
+            <div class="meta-item">
+                <strong>Saat:</strong> @Model.SendDate.ToString("HH:mm")
+            </div>
+        </div>
+
+        <div class="subject">
+            @(!string.IsNullOrWhiteSpace(Model.Subject) ? Model.Subject : "(Konu belirtilmemiş)")
+        </div>
+
+        <div class="message-box">
+            @Model.MessageDetail
+        </div>
+
+        <div class="actions">
+
+            <a href="/Message/MessageList" class="btn btn-back">
+                ← Mesaj Listesi
+            </a>
+
+            <form method="post" action="/Message/ToggleRead">
+                <input type="hidden" name="id" value="@Model.MessageId" />
+                <button class="btn btn-toggle" type="submit">
+                    @(Model.IsRead ? "Okunmadı Yap" : "Okundu Yap")
+                </button>
+            </form>
+
+            <form method="post" action="/Message/DeleteMessage"
+                  onsubmit="return confirm('Bu mesaj silinsin mi?');">
+                <input type="hidden" name="id" value="@Model.MessageId" />
+                <button class="btn btn-delete" type="submit">
+                    Sil
+                </button>
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

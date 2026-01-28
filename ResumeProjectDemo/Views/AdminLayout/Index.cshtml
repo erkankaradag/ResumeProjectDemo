@@ -1,0 +1,185 @@
+﻿@using ResumeProjectDemo.Context
+@inject ResumeContext _context
+@{
+    Layout = null;
+
+    // Route bilgileri (aktif menü için)
+    string ctrl = (ViewContext.RouteData.Values["controller"]?.ToString() ?? "").ToLower();
+    string act = (ViewContext.RouteData.Values["action"]?.ToString() ?? "").ToLower();
+
+    string NavClass(string controller)
+    {
+        controller = controller.ToLower();
+        bool isActive = ctrl == controller;
+
+        return isActive
+            ? "flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 dark:bg-primary/20 text-primary transition-colors"
+            : "flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-[#9db2b9] hover:bg-slate-100 dark:hover:bg-[#1c2427] transition-colors";
+    }
+
+    // Okunmamış mesaj sayısı (layout her sayfada çalışır)
+    int unreadMessageCount = _context.Messages.Count(x => x.IsRead == false);
+}
+
+<link rel="stylesheet" href="https://themify.me/themify-icons.css">
+
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Developer Portfolio Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13b6ec",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#101d22",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex overflow-hidden">
+    <!-- Fixed Vertical Sidebar -->
+    <aside class="w-64 flex-shrink-0 bg-white dark:bg-[#111618] border-r border-slate-200 dark:border-[#283539] flex flex-col h-screen">
+        <div class="p-6 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-background-dark font-bold text-xl">
+                EK
+            </div>
+            <div class="flex flex-col">
+                <h1 class="text-sm font-bold leading-tight">Erkan KARADAĞ</h1>
+                <p class="text-xs text-slate-500 dark:text-[#9db2b9]">Senior .NET Dev</p>
+            </div>
+        </div>
+
+        <nav class="flex-1 px-4 py-2 space-y-1 overflow-y-auto">
+            <a class="@NavClass("Statistics")" href="/Statistics/Index">
+                <span class="material-symbols-outlined text-[22px]">dashboard</span>
+                <span class="text-sm font-medium">Kontrol Paneli</span>
+            </a>
+
+            <a class="@NavClass("About")" href="/About/AboutList">
+                <span class="material-symbols-outlined text-[22px]">person</span>
+                <span class="text-sm font-medium">Hakkımda</span>
+            </a>
+
+            <a class="@NavClass("Skill")" href="/Skill/SkillList">
+                <span class="material-symbols-outlined text-[22px]">psychology</span>
+                <span class="text-sm font-medium">Yeteneklerim</span>
+            </a>
+
+            <a class="@NavClass("Experience")" href="/Experience/ExperienceList">
+                <span class="material-symbols-outlined text-[22px]">work</span>
+                <span class="text-sm font-medium">Deneyimlerim</span>
+            </a>
+
+            <a class="@NavClass("Service")" href="/Service/ServiceList">
+                <span class="material-symbols-outlined text-[22px]">folder</span>
+                <span class="text-sm font-medium">Hizmetlerim</span>
+            </a>
+
+            <a class="@NavClass("Portfolio")" href="/Portfolio/PortfolioList">
+                <span class="material-symbols-outlined text-[22px]">school</span>
+                <span class="text-sm font-medium">Projelerim</span>
+            </a>
+
+            <a class="@NavClass("Testimonial")" href="/Testimonial/TestimonialList">
+                <span class="material-symbols-outlined text-[22px]">verified</span>
+                <span class="text-sm font-medium">Referanslarım</span>
+            </a>
+
+            <a class="@NavClass("Message")" href="/Message/MessageList">
+                <span class="material-symbols-outlined text-[22px]">mail</span>
+                <span class="text-sm font-medium">Mesajlar</span>
+                @if (unreadMessageCount > 0)
+                {
+                    <span class="ml-auto inline-flex items-center justify-center min-w-[22px] h-[22px] px-1 text-[11px] font-black bg-primary text-background-dark rounded-full">
+                        @(unreadMessageCount > 99 ? "99+" : unreadMessageCount.ToString())
+                    </span>
+                }
+            </a>
+
+            <a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-[#9db2b9] hover:bg-slate-100 dark:hover:bg-[#1c2427] transition-colors mt-auto" href="https://localhost:7165/Default/Index">
+                <span class="material-symbols-outlined text-[22px]">settings</span>
+                <span class="text-sm font-medium">Canlı Görünüm</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col min-w-0 bg-background-light dark:bg-background-dark overflow-hidden">
+        <!-- Top Navbar -->
+        <header class="h-16 flex items-center justify-between px-8 bg-white dark:bg-[#111618] border-b border-slate-200 dark:border-[#283539] z-10">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">terminal</span>
+                <h2 class="text-lg font-bold tracking-tight">Developer Admin Panel</h2>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <!-- Message icon + unread badge -->
+                <a href="/Message/MessageList"
+                   class="relative p-2 text-slate-500 dark:text-[#9db2b9] hover:bg-slate-100 dark:hover:bg-[#283539] rounded-lg transition-colors">
+                    <span class="material-symbols-outlined">mail</span>
+
+                    @if (unreadMessageCount > 0)
+                    {
+                        <span class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1
+                                         bg-primary text-background-dark text-[11px] font-black
+                                         rounded-full flex items-center justify-center
+                                         border-2 border-white dark:border-[#111618]">
+                            @(unreadMessageCount > 99 ? "99+" : unreadMessageCount.ToString())
+                        </span>
+                    }
+                </a>
+
+                <div class="flex items-center gap-3 pl-4 border-l border-slate-200 dark:border-[#283539]">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-xs font-bold">Süper Kullanıcı</p>
+                        <p class="text-[10px] text-primary">Senior Developer</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-slate-200 bg-cover bg-center"
+                         style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCHbt4yI-strfVEuX0x8SAH4oMcokffsW8B0GDt_2uhoIKCbC4WglxcrR5FQjO2PnwAfuwPggUnbOtOE0InF8n8RXTqEfAZuWn99dBP6YgZVVhsijmhWwR7oohVkQqUDZdj7HV1aa1Nq0JdwsTi1D6hqS082K1FZpbP-zq6SllmfeolrAhvelQwxQTnrbqcbIW0M0ymZ1S3SW1Y2CJ1fJt6EOTgWe4K0PmwPytTzn6ZDRj0MxX8GAF49bJlkCOI-OW55fJuGlhsTj8');"></div>
+                </div>
+            </div>
+        </header>
+
+        @RenderBody()
+
+        <!-- Float Action Button for Mobile / Quick Access -->
+        <div class="fixed bottom-8 right-8 lg:hidden">
+            <button class="w-14 h-14 bg-primary rounded-full shadow-lg flex items-center justify-center text-background-dark hover:scale-105 transition-transform">
+                <span class="material-symbols-outlined text-[30px]">add</span>
+            </button>
+        </div>
+    </main>
+</body>
+</html>
